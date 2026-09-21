@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1e3fae" />
+  <title>PusoPay Demo — DigiCash eWallet x SVI KYC</title>
+  <link rel="icon" type="image/png" href="PusoPay_Logo.png" />
+  <link rel="apple-touch-icon" href="PusoPay_Logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="PusoPay_Logo.png" alt="PusoPay logo" />
+      <div>
+        <h1>PusoPay <span class="pill">DEMO</span></h1>
+        <p>DigiCash eWallet &middot; identity verification by SVI</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button id="themeLight" class="active">☀ Light</button>
+        <button id="themeDark">🌙 Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============ COL 1: the actual PusoPay mobile app ============ -->
+    <section class="app-col">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span id="phoneTime">9:41</span><span>📶 🔋</span></div>
+
+        <!-- Welcome -->
+        <div class="screen active" data-screen="welcome">
+          <div class="app-hero">
+            <img class="hero-logo" src="PusoPay_Logo.png" alt="PusoPay — an e-wallet for PWDs, Senior Citizens, Solo Parents" />
+            <p class="tagline">Cash in, send, and pay — verified in minutes.</p>
+          </div>
+          <div class="pbar"><div class="pfill" style="width:8%"></div></div>
+          <p class="stepcap">Welcome</p>
+          <button class="btn primary big" data-go="phone">Create free account</button>
+          <button class="btn ghost big" data-go="phone">Log in</button>
+          <p class="fine">Demo only — no real money moves here.</p>
+        </div>
+
+        <!-- Phone number -->
+        <div class="screen" data-screen="phone">
+          <button class="back" data-go="welcome">‹</button>
+          <h2>What's your mobile number?</h2>
+          <p class="muted">We'll text you a one-time code. This becomes your PusoPay account ID.</p>
+          <div class="pbar"><div class="pfill" style="width:20%"></div></div>
+          <p class="stepcap">Step 1 of 6 · Account</p>
+          <div class="field"><span class="prefix">+63</span><input id="phoneNum" inputmode="numeric" maxlength="11" value="9876543210" /></div>
+          <button class="btn primary big" id="btnSendOtp">Send code</button>
+        </div>
+
+        <!-- OTP -->
+        <div class="screen" data-screen="otp">
+          <button class="back" data-go="phone">‹</button>
+          <h2>Enter your code</h2>
+          <p class="muted">We sent an SMS to <b id="otpTo">+63…</b> — tap the code in the backend inbox and it fills in here. You can also paste it.</p>
+          <div class="pbar"><div class="pfill" style="width:32%"></div></div>
+          <p class="stepcap">Step 1 of 6 · Verify</p>
+          <div class="otp-row">
+            <input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" />
+            <input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" />
+          </div>
+          <button class="btn ghost big" id="btnFillOtp">⚡ Fill demo code for me</button>
+          <button class="btn primary big" id="btnVerifyOtp">Verify</button>
+          <button class="btn ghost big" id="btnResend">Resend code</button>
+        </div>
+
+        <!-- KYC intro -->
+        <div class="screen" data-screen="kycintro">
+          <h2>Verify your identity 🪪</h2>
+          <p class="muted">SVI verifies you so PusoPay can unlock your wallet. About 2 minutes:</p>
+          <div class="pbar"><div class="pfill" style="width:44%"></div></div>
+          <p class="stepcap">Step 2 of 6 · Identity check</p>
+          <div class="checklist">
+            <div>🤳 <b>Selfie liveness</b><span>Live camera — prove you're a real person</span></div>
+            <div>🪪 <b>Valid ID scan</b><span>Point your camera at the ID</span></div>
+            <div>🙂 <b>Face match</b><span>Selfie vs ID photo — or PNID QR</span></div>
+          </div>
+          <button class="btn primary big" id="btnStartKyc">Start verification</button>
+          <pre class="mini-out" id="outTrn">Secure session not started.</pre>
+        </div>
+
+        <!-- Selfie (live camera) -->
+        <div class="screen" data-screen="selfie">
+          <button class="back" data-go="kycintro">‹</button>
+          <h2>Take a selfie 🤳</h2>
+          <p class="muted">Face the light, no sunglasses. The camera opens automatically.</p>
+          <div class="pbar"><div class="pfill" style="width:56%"></div></div>
+          <p class="stepcap">Step 3 of 6 · Selfie</p>
+          <div class="camwrap">
+            <video id="selfieVideo" class="camvideo mirror" autoplay playsinline muted></video>
+            <img id="selfiePrev" class="preview" alt="" />
+            <p class="muted hidden" id="selfieCamErr">Camera unavailable — upload a photo instead.</p>
+          </div>
+          <div class="row2">
+            <button class="btn primary big" id="btnSnapSelfie">📸 Capture</button>
+            <button class="btn ghost big hidden" id="btnRetakeSelfie">↺ Retake</button>
+          </div>
+          <label class="uploadlink">or <u>upload a photo</u><input type="file" id="selfieFile" accept="image/*" hidden /></label>
+          <canvas id="selfieCanvas" hidden></canvas>
+          <div id="liveChip" class="chip idle">Liveness: not run</div>
+          <button class="btn primary big" id="btnLiveness">Check liveness</button>
+          <button class="btn ghost big" data-go="idscan" id="btnToId" disabled>Continue →</button>
+        </div>
+
+        <!-- ID scan (live camera) -->
+        <div class="screen" data-screen="idscan">
+          <button class="back" data-go="selfie">‹</button>
+          <h2>Scan your ID 🪪</h2>
+          <p class="muted">Pick your ID type, then point the camera at the card and capture each side.</p>
+          <div class="pbar"><div class="pfill" style="width:68%"></div></div>
+          <p class="stepcap">Step 4 of 6 · ID</p>
+          <div id="idDetected" class="chip idle">ID type: auto-detected on scan</div>
+          <div class="camwrap">
+            <video id="idVideo" class="camvideo" autoplay playsinline muted></video>
+            <div class="id-prevs">
+              <img id="idFrontPrev" class="preview" alt="ID front" />
+              <img id="idBackPrev" class="preview" alt="ID back" />
+            </div>
+            <p class="muted hidden" id="idCamErr">Camera unavailable — upload photos instead.</p>
+          </div>
+          <div class="row2">
+            <button class="btn primary big" id="btnSnapFront">📸 Capture front *</button>
+            <button class="btn ghost big" id="btnSnapBack">+ Capture back</button>
+          </div>
+          <label class="uploadlink">or <u>upload photos</u>
+            <input type="file" id="idFrontFile" accept="image/*" hidden />
+            <input type="file" id="idBackFile" accept="image/*" hidden />
+          </label>
+          <div class="row2">
+            <button class="btn ghost big" id="btnPickFront">⇪ front file</button>
+            <button class="btn ghost big" id="btnPickBack">⇪ back file</button>
+          </div>
+          <canvas id="idCanvas" hidden></canvas>
+          <button class="btn primary big" id="btnOcr">Read my ID</button>
+          <button class="btn ghost big" data-go="facematch" id="btnToFace" disabled>Continue →</button>
+        </div>
+
+        <!-- Face match / QR -->
+        <div class="screen" data-screen="facematch">
+          <button class="back" data-go="idscan">‹</button>
+          <h2>It's really you 🙂</h2>
+          <p class="muted">Match your selfie to your ID photo — or verify with a PNID QR instead.</p>
+          <div class="pbar"><div class="pfill" style="width:80%"></div></div>
+          <p class="stepcap">Step 5 of 6 · Match</p>
+          <div class="tabs"><button class="tab active" data-tab="match">Face match</button><button class="tab" data-tab="qr">PNID QR</button></div>
+          <div id="tabMatch">
+            <p class="muted">Uses your <b>captured selfie</b> + <b>captured ID front</b>:</p>
+            <div class="match-inputs">
+              <figure><img id="mSelfie" alt="captured selfie" /><figcaption>Selfie</figcaption></figure>
+              <span class="vs">↔</span>
+              <figure><img id="mId" alt="captured ID front" /><figcaption>ID front</figcaption></figure>
+            </div>
+            <div id="matchChip" class="chip idle">Face match: not run</div>
+            <button class="btn primary big" id="btnFaceMatch">Match selfie ↔ ID</button>
+          </div>
+          <div id="tabQr" class="hidden">
+            <p class="muted">Point the camera at the PNID QR — or upload a photo of it. The decoded string fills the box.</p>
+            <div class="camwrap">
+              <video id="qrVideo" class="camvideo" autoplay playsinline muted></video>
+              <img id="qrPrev" class="preview" alt="QR image" />
+            </div>
+            <div class="row2">
+              <button class="btn ghost big" id="btnQrCam">📷 Scan live</button>
+              <button class="btn ghost big" id="btnQrSnap" disabled>◎ Capture &amp; decode</button>
+            </div>
+            <label class="uploadlink">or <u>upload QR image</u><input type="file" id="qrFile" accept="image/*" hidden /></label>
+            <canvas id="qrCanvas" hidden></canvas>
+            <textarea id="qrValue" rows="3" placeholder="Decoded PNID QR string appears here (or paste manually)…"></textarea>
+            <div id="qrChip" class="chip idle">QR: not run</div>
+            <button class="btn primary big" id="btnQr">Verify QR + selfie</button>
+          </div>
+          <button class="btn ghost big" data-go="review" id="btnToReview">Review details →</button>
+        </div>
+
+        <!-- Review -->
+        <div class="screen" data-screen="review">
+          <button class="back" data-go="facematch">‹</button>
+          <h2>Is this correct? 📝</h2>
+          <p class="muted">We read this from your ID. Fix anything wrong, then submit.</p>
+          <div class="pbar"><div class="pfill" style="width:90%"></div></div>
+          <p class="stepcap">Step 6 of 6 · Confirm</p>
+          <form id="kycForm" class="form" onsubmit="return false">
+            <div class="frow"><label>Last name<input id="f_last" /></label><label>First name<input id="f_first" /></label></div>
+            <div class="frow"><label>Suffix<input id="f_suffix" placeholder="Jr / III" /></label><label>Birthdate<input id="f_bday" type="date" /></label></div>
+            <label>ID number<input id="f_idnum" /></label>
+            <div class="frow"><label>ID type<input id="f_type" /></label><label>Expiry<input id="f_exp" type="date" /></label></div>
+            <label>Address<input id="f_addr1" /></label>
+            <div class="frow"><label>Barangay<input id="f_brgy" /></label><label>City<input id="f_city" /></label></div>
+            <div class="frow"><label>Province<input id="f_prov" /></label><label>Zipcode<input id="f_zip" /></label></div>
+          </form>
+          <button class="btn ghost big" id="btnAutofill">↺ Refill from ID scan</button>
+          <button class="btn primary big" id="btnSubmit">Submit verification</button>
+        </div>
+
+        <!-- Processing / result -->
+        <div class="screen" data-screen="result">
+          <h2 id="resTitle">Checking… ⏳</h2>
+          <p class="muted" id="resSub">SVI is reviewing your submission.</p>
+          <div class="pbar"><div class="pfill" style="width:100%"></div></div>
+          <div id="resCard" class="res-card">…</div>
+          <button class="btn primary big hidden" id="btnToWallet">Open my wallet →</button>
+          <button class="btn ghost big" id="btnRetry">↺ Start over</button>
+        </div>
+
+        <!-- Wallet home -->
+        <div class="screen" data-screen="wallet">
+          <div class="w-head"><div><p class="muted">Kamusta,</p><h2 id="wName">Ka-Puso! 💛</h2></div><img class="avatar" src="PusoPay_Logo.png" alt="PusoPay" /></div>
+          <div class="kyc-banner" id="kycBanner">✔ Verified</div>
+          <div class="balcard"><span>Available balance</span><strong id="wBalance">₱0.00</strong><span class="wnum" id="wNum">…</span></div>
+          <div class="w-grid">
+            <button id="btnCashIn">＋<span>Cash In</span></button>
+            <button id="btnSend">⇄<span>Send</span></button>
+            <button id="btnQrShow">▦<span>My QR</span></button>
+            <button id="btnMore">•••<span>More</span></button>
+          </div>
+          <div class="sheet hidden" id="sheetCashIn">
+            <h3>Cash in</h3>
+            <input id="wAmountIn" type="number" min="1" value="500" />
+            <button class="btn primary big" id="doCashIn">Confirm cash in</button>
+          </div>
+          <div class="sheet hidden" id="sheetSend">
+            <h3>Send money</h3>
+            <input id="wTo" value="0927-000-0000" />
+            <input id="wAmountOut" type="number" min="1" value="200" />
+            <button class="btn primary big" id="doSend">Send</button>
+          </div>
+          <h3>Recent activity</h3>
+          <div id="wHistory" class="history"><p class="muted">Nothing yet.</p></div>
+          <nav class="tabbar"><span class="on" data-tab="home">🏠 Home</span><span data-tab="qr">▦ QR</span><span data-tab="bills">🧾 Bills</span><span data-tab="me">👤 Me</span></nav>
+        </div>
+
+        <!-- Profile (from session captures + ID read) -->
+        <div class="screen" data-screen="profile">
+          <button class="back" data-go="wallet">‹</button>
+          <h2>Profile 👤</h2>
+          <p class="muted">Your verified identity from this session.</p>
+          <div class="prof-head">
+            <img id="pPhoto" class="prof-photo" alt="verified selfie" />
+            <div class="prof-id">
+              <h3 id="pName">—</h3>
+              <p class="muted" id="pPhone">—</p>
+              <div id="pStatus" class="chip idle">—</div>
+            </div>
+          </div>
+          <div class="prof-list" id="pList"></div>
+          <button class="btn ghost big" data-go="wallet">Back to wallet</button>
+        </div>
+      </div>
+      <p class="caption">↑ The <b>PusoPay app</b> a customer installs. The middle column is the live backend · right column is results + docs.</p>
+    </section>
+
+    <!-- ============ COL 2: backend live views ============ -->
+    <section class="console-col">
+      <details class="card" open>
+        <summary><h2>🧾 API activity <small id="apiCount">0 calls</small></h2></summary>
+        <div id="apiLog" class="apilog"><p class="muted">Every call the app makes appears here with timing + payload.</p></div>
+      </details>
+
+      <details class="card" open>
+        <summary><h2>📨 Mock SMS <small>inbox</small></h2></summary>
+        <div id="smsBox" class="muted">No messages yet — enter a number in the app.</div>
+      </details>
+
+      <details class="card" open>
+        <summary><h2>🔌 Live session info</h2></summary>
+        <div class="kv"><span>API base</span><code id="sviBase">…</code></div>
+        <div class="kv"><span>Session (TRN)</span><code id="trnLabel">— none —</code><button class="mini" id="btnCopyTrn">copy</button></div>
+        <div class="kv"><span>Upstream</span><code id="healthLabel">checking…</code></div>
+        <p class="muted">Secrets (client secret, API key, bearer token) never leave this server — the app calls <code>/api/kyc/*</code> and the server attaches credentials.</p>
+      </details>
+    </section>
+
+    <!-- ============ COL 3: results + docs ============ -->
+    <section class="info-col">
+      <details class="card" open>
+        <summary><h2>✅ Verification results</h2></summary>
+        <div class="chips">
+          <div class="chip idle" id="cLive">Liveness —</div>
+          <div class="chip idle" id="cOcr">ID read —</div>
+          <div class="chip idle" id="cFace">Face match —</div>
+          <div class="chip idle" id="cSubmit">Decision —</div>
+        </div>
+        <pre id="outDetail" class="out">Select any API call to inspect its full JSON here.</pre>
+      </details>
+
+      <details class="card" open>
+        <summary><h2>🗂 Session data <small id="sessSync">local only</small></h2></summary>
+        <div id="sessData" class="sessdata"><p class="muted">No session yet — start verification in the app.</p></div>
+        <div class="row">
+          <button id="btnToken" class="btn ghost">Get access token</button>
+          <button id="btnResult" class="btn ghost">Fetch stored KYC result</button>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary><h2>📖 API guide <small>which app step calls which endpoint</small></h2></summary>
+        <div class="map">
+          <div><b>Login → token</b><code>POST /auth/token</code><span>Basic(client ID : secret) + API key → bearer, 15 min</span></div>
+          <div><b>Start verification → session</b><code>POST /transaction/create</code><span>returns the session ID (TRN) used by every later call</span></div>
+          <div><b>Selfie → liveness</b><code>POST /liveness/passive</code><span>{ image } → pass/fail + confidence (bar is 0.80)</span></div>
+          <div><b>ID scan → read</b><code>POST /id/ocr</code><span>{ front, back? } → name, birthdate, address, ID no.</span></div>
+          <div><b>Match → face check</b><code>POST /face-match/check</code><span>{ selfie, id photo } → matched? (bar is 0.75)</span></div>
+          <div><b>Match → QR option</b><code>POST /verifications/qr</code><span>{ QR string, selfie } → verified via eVerify</span></div>
+          <div><b>Confirm → decision</b><code>POST /transaction/submit</code><span>final identity + photos → PASSED or PENDING_REVIEW</span></div>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary><h2>🪪 Accepted IDs &amp; error codes</h2></summary>
+        <h3>Accepted IDs</h3><div id="idTypeTable" class="tbl">loading…</div>
+        <h3>Error codes</h3><div id="errTable" class="tbl">loading…</div>
+      </details>
+    </section>
+  </main>
+
+  <footer>PusoPay demo · DigiCash eWallet · identity checks by SVI · base <code>https://verify.dev.svi.cloud/api/v1</code> · demo only, don't use real PII in screenshots.</footer>
+  <div id="toast" class="toast"></div>
+  <script src="vendor/jsQR.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
