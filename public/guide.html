@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PusoPay Onboarding KYC API Guide v1.0.0 — Full Briefing</title>
+  <link rel="icon" type="image/png" href="PusoPay_Logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body.guide { margin: 0; }
+    .g-shell { display: grid; grid-template-columns: 292px minmax(0, 1fr); min-height: 100vh; }
+    /* ---- sidebar agenda ---- */
+    .g-side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--card); border-right: 1px solid var(--line); padding: 18px 14px; display: flex; flex-direction: column; gap: 4px; scrollbar-width: thin; }
+    .g-brand { display: flex; gap: 10px; align-items: center; padding: 2px 6px 14px; }
+    .g-brand img { width: 42px; height: 42px; border-radius: 12px; background: #fff; object-fit: cover; }
+    .g-brand b { font-size: 15px; display: block; }
+    .g-brand span { font-size: 11px; color: var(--muted); }
+    .g-group { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 12px 8px 4px; }
+    .g-link { display: flex; gap: 9px; align-items: baseline; padding: 7px 9px; border-radius: 10px; color: var(--txt); text-decoration: none; font-size: 13.5px; border: 1px solid transparent; }
+    .g-link .n { font-size: 11px; font-weight: 800; color: var(--muted); min-width: 22px; }
+    .g-link:hover { background: var(--card2); }
+    .g-link.on { background: var(--card2); border-color: var(--acc); font-weight: 700; }
+    .g-link.on .n { color: var(--acc); }
+    .g-progress { height: 4px; background: var(--card2); border-radius: 4px; margin: 12px 6px 4px; overflow: hidden; }
+    .g-progress div { height: 100%; width: 0; background: linear-gradient(90deg, var(--acc), var(--acc2)); }
+    .g-pagenav { position: fixed; bottom: 16px; right: 20px; display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 8px 10px; box-shadow: var(--shadow); z-index: 50; }
+    .g-pagenav #gcount { font-size: 12px; font-weight: 800; color: var(--muted); min-width: 52px; text-align: center; }
+    .g-pagenav .btn { padding: 9px 18px; }
+    .g-side .fine { margin-top: auto; padding: 10px 8px 0; }
+    /* ---- main ---- */
+    .g-main { min-width: 0; padding: 0 0 80px; }
+    .g-top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; padding: 12px 34px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .g-top .crumb { font-size: 13px; color: var(--muted); }
+    .g-top .spacer { flex: 1; }
+    .g-sec { padding: 44px 40px 8px; max-width: 1060px; }
+    .g-sec .kicker { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--acc2); }
+    .g-sec h2 { font-size: clamp(26px, 3.4vw, 40px); margin: 6px 0 10px; }
+    .g-sec p.lead { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 70ch; }
+    .g-sec p, .g-sec li { font-size: 14.5px; line-height: 1.6; }
+    .g-sec ul { display: grid; gap: 7px; padding-left: 20px; }
+    /* cover */
+    .cover { min-height: calc(100vh - 57px); display: flex; flex-direction: column; justify-content: center; padding: 40px; max-width: 1060px; }
+    .cover h1 { font-size: clamp(40px, 6vw, 76px); line-height: 1.02; margin: 10px 0 14px; }
+    .cover h1 .grad { background: linear-gradient(100deg, var(--acc), var(--acc2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cover .sub { font-size: clamp(16px, 2vw, 21px); color: var(--muted); max-width: 62ch; line-height: 1.55; }
+    .statrow { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0; }
+    .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 18px; box-shadow: var(--shadow); }
+    .stat b { font-size: 26px; display: block; letter-spacing: -.02em; }
+    .stat span { font-size: 12px; color: var(--muted); }
+    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    /* endpoint blocks */
+    .ep { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 18px 0 6px; }
+    .method { font-weight: 800; font-size: 13px; padding: 5px 12px; border-radius: 8px; background: #dff5e9; color: #0c5c3c; border: 1px solid #9adcb9; }
+    .method.get { background: #e4ecff; color: #1e3fae; border-color: #b9c8f5; }
+    .ep code.big { font-size: 15px; }
+    table.spec { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0 4px; }
+    table.spec th, table.spec td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table.spec th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+    table.spec td:first-child { font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
+    .req { color: #b42318; font-weight: 700; font-size: 11px; }
+    .opt { color: var(--muted); font-size: 11px; }
+    pre.code { background: #10142a; color: #e8ecff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font-size: 12.5px; line-height: 1.55; overflow-x: auto; }
+    [data-theme="light"] pre.code { background: #141a33; }
+    .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 900px) { .cols2 { grid-template-columns: 1fr; } .finale-grid { grid-template-columns: 1fr; } .finale-side { max-width: 340px; } }
+    .note { background: var(--card2); border: 1px solid var(--line); border-left: 4px solid var(--acc); border-radius: 0 12px 12px 0; padding: 10px 14px; font-size: 13px; margin: 12px 0; }
+    .flow { display: flex; margin: 14px 0; flex-wrap: wrap; }
+    .flow div { flex: 1 1 120px; background: var(--card2); border: 1px solid var(--line); padding: 10px; font-size: 12px; text-align: center; }
+    .flow div:first-child { border-radius: 12px 0 0 12px; }
+    .flow div:last-child { border-radius: 0 12px 12px 0; }
+    .flow b { display: block; font-size: 13px; }
+    /* finale */
+    .finale-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
+    .finale-side { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 26px 26px 18px; display: grid; justify-items: center; gap: 12px; box-shadow: var(--shadow); opacity: 0; }
+    .finale-side .muted { text-align: center; font-size: 13px; }
+    .finale-logo { width: 100%; max-width: 250px; aspect-ratio: 1; border-radius: 20px; background: #fff; object-fit: cover; }
+    .svi-words { font-size: clamp(26px, 3.2vw, 42px) !important; white-space: nowrap; }
+    .svi-words span { opacity: 0; display: inline-block; margin-right: .25em; }
+    .svi-words span:nth-child(1) { color: #f59e0b; }
+    .svi-words span:nth-child(2) { color: var(--acc2); }
+    .svi-words span:nth-child(3) { color: var(--acc); }
+    .finale-text > *:not(.svi-words):not(.q-list), .finale .q-list li { opacity: 0; }
+    .finale.play .finale-side { animation: rise .8s ease .15s forwards; }
+    .finale.play .svi-words span:nth-child(1) { animation: rise .6s ease .4s forwards; }
+    .finale.play .svi-words span:nth-child(2) { animation: rise .6s ease .8s forwards; }
+    .finale.play .svi-words span:nth-child(3) { animation: rise .6s ease 1.2s forwards; }
+    .finale.play .finale-text > *:nth-child(2) { animation: rise .6s ease 1.6s forwards; }
+    .finale.play .q-list li:nth-child(1) { animation: rise .6s ease 1.9s forwards; }
+    .finale.play .q-list li:nth-child(2) { animation: rise .6s ease 2.15s forwards; }
+    .finale.play .q-list li:nth-child(3) { animation: rise .6s ease 2.4s forwards; }
+    .finale.play .finale-text > *:nth-child(4) { animation: rise .6s ease 2.7s forwards; }
+    .finale.play .finale-text > *:nth-child(5) { animation: rise .6s ease 3s forwards; }
+    .finale.play .finale-text > *:nth-child(6) { animation: rise .6s ease 3.3s forwards; }
+    /* breathing room before the finale so its entrance isn't spoiled */
+    #demo { padding-bottom: 36vh; }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .q-list { list-style: none; padding: 0; display: grid; gap: 10px; margin: 16px 0; counter-reset: q; }
+    .q-list li { display: flex; gap: 14px; align-items: baseline; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; font-size: 17px; counter-increment: q; }
+    .q-list li::before { content: counter(q, decimal-leading-zero); font-weight: 800; font-size: 13px; color: var(--acc); }
+    .q-list li span { color: var(--muted); font-size: 14px; }
+    @media (max-width: 900px) {
+      .g-shell { grid-template-columns: 1fr; }
+      .g-side { position: static; height: auto; flex-direction: row; align-items: center; overflow-x: auto; padding: 10px; }
+      .g-brand, .g-group, .g-side .fine, .g-progress { display: none; }
+      .g-link { white-space: nowrap; }
+      .g-sec, .cover { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body class="guide">
+<div class="g-shell">
+  <nav class="g-side" id="agenda">
+    <div class="g-brand">
+      <img src="PusoPay_Logo.png" alt="PusoPay logo" />
+      <div><b>PusoPay KYC API</b><span>Guide v1.0.0 · briefing</span></div>
+    </div>
+    <div class="g-progress"><div id="gprog"></div></div>
+    <div class="g-group">Opening</div>
+    <a class="g-link" href="#cover"><span class="n">00</span>The Big Picture</a>
+    <div class="g-group">Endpoints</div>
+    <a class="g-link" href="#auth"><span class="n">01</span>Auth · POST /auth/token</a>
+    <a class="g-link" href="#create"><span class="n">02</span>Session · /transaction/create</a>
+    <a class="g-link" href="#liveness"><span class="n">03</span>Liveness · /liveness/passive</a>
+    <a class="g-link" href="#ocr"><span class="n">04</span>ID read · POST /id/ocr</a>
+    <a class="g-link" href="#face"><span class="n">05</span>Face match · /face-match/check</a>
+    <a class="g-link" href="#qr"><span class="n">06</span>PNID QR · /verifications/qr</a>
+    <a class="g-link" href="#submit"><span class="n">07</span>Decision · /transaction/submit</a>
+    <div class="g-group">Reference</div>
+    <a class="g-link" href="#errors"><span class="n">08</span>Error codes</a>
+    <a class="g-link" href="#ids"><span class="n">09</span>Accepted IDs</a>
+    <a class="g-link" href="#demo"><span class="n">10</span>Live demo map</a>
+    <a class="g-link" href="#recap"><span class="n">11</span>Recap</a>
+    <p class="fine muted">Base: <code>verify.dev.svi.cloud/api/v1</code></p>
+  </nav>
+
+  <div class="g-main">
+    <div class="g-top">
+      <span class="crumb" id="crumb">00 · The Big Picture</span>
+      <div class="spacer"></div>
+      <a class="btn ghost" href="index.html">Open demo</a>
+      <div class="theme-toggle"><button id="themeLight" class="active">Light</button><button id="themeDark">Dark</button></div>
+    </div>
+
+    <!-- 00 COVER -->
+    <section class="cover" id="cover">
+      <div class="kicker" style="font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--acc2)">PusoPay · DigiCash eWallet × SVI · API Guide v1.0.0</div>
+      <h1>Know your customer in <span class="grad">minutes, not days.</span></h1>
+      <p class="sub">PusoPay serves PWDs, senior citizens, and solo parents — people who can't afford a branch visit. This API lets the app verify identity with a selfie and an ID, under one session ID, and open a wallet on a pass.</p>
+      <div class="statrow">
+        <div class="stat"><b>7</b><span>endpoints, one base URL</span></div>
+        <div class="stat"><b>15 min</b><span>access-token lifetime</span></div>
+        <div class="stat"><b>80 / 75%</b><span>liveness / face-match bars</span></div>
+        <div class="stat"><b>15</b><span>ID types incl. Other</span></div>
+      </div>
+      <p class="sub"><b>PusoPay</b> owns the wallet and the customer screens. <b>SVI</b> owns identity proofing. The two sides meet at exactly one concept: the <b>TRN — a session ID</b> created up front and stapled to every photo and check.</p>
+      <div class="flow">
+        <div><b>1. Token</b>server logs in</div>
+        <div><b>2. Session</b>TRN issued</div>
+        <div><b>3. Selfie</b>liveness 80%</div>
+        <div><b>4. ID</b>read + match 75%</div>
+        <div><b>5. Decision</b>PASSED / REVIEW</div>
+      </div>
+      <div class="note"><b>Plain-English rule:</b> SVI answers three questions — <i>are you live, is your ID real, does your face match</i> — and PusoPay opens the wallet on a pass. PNID passes instantly; other IDs go to human review.</div>
+      <div class="cta-row">
+        <a class="btn primary" href="#auth">Start the briefing ↓</a>
+        <a class="btn ghost" href="index.html">Skip to live demo</a>
+      </div>
+    </section>
+
+    <!-- 01 AUTH -->
+    <section class="g-sec" id="auth">
+      <div class="kicker">01 · Authentication</div>
+      <h2>Logging the server in</h2>
+      <p class="lead">OAuth 2.0 client-credentials. The server trades its provisioned credentials for a short-lived bearer token — the phone never sees secrets.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/auth/token</code></div>
+      <h3>Headers</h3>
+      <table class="spec">
+        <tr><th>Header</th><th>Value</th></tr>
+        <tr><td>Content-Type</td><td>application/x-www-form-urlencoded</td></tr>
+        <tr><td>Authorization</td><td>HTTP Basic — base64(Client ID : Client Secret)</td></tr>
+        <tr><td>x-api-key</td><td>Gateway key issued at onboarding</td></tr>
+      </table>
+      <h3>Body</h3>
+      <table class="spec"><tr><th>Field</th><th>Required</th><th>Value</th></tr>
+        <tr><td>grant_type</td><td><span class="req">required</span></td><td>client_credentials</td></tr></table>
+      <div class="cols2">
+        <div><h3>Sample response · 200</h3>
+<pre class="code">{
+  "access_token": "eyJ...",
+  "token_type": "Bearer",
+  "expires_in": 900,
+  "expires_at": "2026-07-14T22:48:46Z"
+}</pre></div>
+        <div><h3>Field notes</h3>
+          <table class="spec"><tr><th>Field</th><th>Meaning</th></tr>
+          <tr><td>access_token</td><td>JWT → <code>Authorization: Bearer</code> on later calls</td></tr>
+          <tr><td>expires_in</td><td>900 s = 15 min; the demo caches + refreshes silently</td></tr>
+          <tr><td>expires_at</td><td>Exact UTC expiry</td></tr></table>
+          <div class="note">Expired token surfaces as <b>401 UNAUTHORIZED</b> downstream — the fix is always "log in again", never "retry the photo".</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 CREATE -->
+    <section class="g-sec" id="create">
+      <div class="kicker">02 · Session</div>
+      <h2>Opening a session (TRN)</h2>
+      <p class="lead">One call, no body. The returned UUID is the claim ticket for the whole onboarding.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/transaction/create</code></div>
+      <h3>Headers</h3>
+      <table class="spec"><tr><th>Header</th><th>Value</th></tr>
+        <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td></tr>
+        <tr><td>x-api-key</td><td>Gateway key</td></tr></table>
+      <div class="cols2">
+        <div><h3>Body</h3><p class="muted">None — empty JSON object.</p></div>
+        <div><h3>Sample response · 200</h3>
+<pre class="code">{
+  "transaction_id": "c5a21976-2e82-4ac0-b173-85aaa1e500a3"
+}</pre></div>
+      </div>
+      <div class="note">Every endpoint from here on also sends <b>X-Transaction-Id: &lt;TRN&gt;</b>. Lose the TRN and the session is unrecoverable — the demo pins it in the backend panel with a copy button.</div>
+    </section>
+
+    <!-- 04 LIVENESS -->
+    <section class="g-sec" id="liveness">
+      <div class="kicker">03 · Liveness</div>
+      <h2>Is this a live person?</h2>
+      <p class="lead">Passive liveness on a single selfie frame. The cheapest fraud filter: printed photos and screen replays fail here.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/liveness/passive</code></div>
+      <h3>Headers</h3>
+      <table class="spec"><tr><th>Header</th><th>Value</th></tr>
+        <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td></tr>
+        <tr><td>X-Transaction-Id</td><td>TRN from §03</td></tr>
+        <tr><td>x-api-key</td><td>Gateway key</td></tr></table>
+      <h3>Body</h3>
+      <table class="spec"><tr><th>Field</th><th>Required</th><th>Meaning</th></tr>
+        <tr><td>image</td><td><span class="req">required</span></td><td>Base64 JPEG/PNG selfie</td></tr></table>
+      <h3>Sample response · 200</h3>
+<pre class="code">{
+  "status": "success",
+  "results": {
+    "passed": true,
+    "confidence_score": 0.82,
+    "threshold": 0.8
+  }
+}</pre>
+      <div class="note"><b>Read it right:</b> HTTP 200 with <b>passed: false</b> is a completed check with a "not live" verdict — not an error. The bar is <b>0.80</b>; the demo shows it as a percentage (82%) and asks for a retake on fail.</div>
+    </section>
+
+    <!-- 05 OCR -->
+    <section class="g-sec" id="ocr">
+      <div class="kicker">04 · ID read</div>
+      <h2>Reading the ID</h2>
+      <p class="lead">OCR extracts printed identity + personal data into a standard JSON shape. Missing fields come back <b>null</b> — never guessed.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/id/ocr</code></div>
+      <h3>Headers</h3>
+      <table class="spec"><tr><th>Header</th><th>Value</th></tr>
+        <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td></tr>
+        <tr><td>X-Transaction-Id</td><td>TRN</td></tr>
+        <tr><td>x-api-key</td><td>Gateway key</td></tr></table>
+      <h3>Body</h3>
+      <table class="spec"><tr><th>Field</th><th>Required</th><th>Meaning</th></tr>
+        <tr><td>id_front_base64</td><td><span class="req">required</span></td><td>ID front photo</td></tr>
+        <tr><td>id_back_base64</td><td><span class="opt">optional</span></td><td>ID back photo</td></tr></table>
+      <h3>Sample response · 200 (abridged)</h3>
+<pre class="code">{
+  "status": "success",
+  "extracted_information": {
+    "id_information": {
+      "code": "3",
+      "type": "PNID",
+      "id_number": "000-000-000",
+      "expiration_date": "2026-12-12"
+    },
+    "personal_information": {
+      "last_name": "Dela Cruz",
+      "first_name": "Juan",
+      "suffix": "Jr",
+      "birthdate": "1990-01-01",
+      "address": {
+        "address_line_1": "45 Mabini Street",
+        "barangay": "Barangay Poblacion",
+        "city_municipality": "Makati City",
+        "province": "Metro Manila",
+        "zipcode": "1210"
+      }
+    }
+  }
+}</pre>
+      <div class="note">The demo <b>auto-detects the ID type</b> from <code>code/type</code> (unknown → code 0, Other) and auto-fills the review form — no typing, fewer errors, kinder to seniors.</div>
+    </section>
+
+    <!-- 06 FACE -->
+    <section class="g-sec" id="face">
+      <div class="kicker">05 · Face match</div>
+      <h2>Does the face match?</h2>
+      <p class="lead">1:1 biometric compare: the <b>captured selfie</b> against the <b>captured ID portrait</b>. Same TRN, verdict recorded as FACE_MATCH.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/face-match/check</code></div>
+      <h3>Body</h3>
+      <table class="spec"><tr><th>Field</th><th>Required</th><th>Meaning</th></tr>
+        <tr><td>face_bio_base64</td><td><span class="req">required</span></td><td>Captured selfie</td></tr>
+        <tr><td>id_base64</td><td><span class="req">required</span></td><td>Captured ID front</td></tr></table>
+      <h3>Sample response · 200</h3>
+<pre class="code">{
+  "status": "success",
+  "results": {
+    "is_matched": true,
+    "confidence_score": 0.82,
+    "threshold": 0.75
+  }
+}</pre>
+      <div class="note">Bar is <b>0.75</b>. The demo shows the two exact photos being compared, side by side, before running it — no black box.</div>
+    </section>
+
+    <!-- 07 QR -->
+    <section class="g-sec" id="qr">
+      <div class="kicker">06 · PNID QR (alternate path)</div>
+      <h2>Or verify by QR</h2>
+      <p class="lead">For PhilSys cards: scan the QR, verify payload + selfie through eVerify. Same outcome, no ID photo needed.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/verifications/qr</code></div>
+      <h3>Body</h3>
+      <table class="spec"><tr><th>Field</th><th>Required</th><th>Meaning</th></tr>
+        <tr><td>qr_value</td><td><span class="req">required</span></td><td>Raw PNID QR string (camera scan or upload decodes it)</td></tr>
+        <tr><td>face_biometric_base64</td><td><span class="req">required</span></td><td>Captured selfie</td></tr></table>
+      <h3>Sample response · 200</h3>
+<pre class="code">{ "status": "success", "is_verified": true }</pre>
+    </section>
+
+    <!-- 08 SUBMIT -->
+    <section class="g-sec" id="submit">
+      <div class="kicker">07 · Decision</div>
+      <h2>Submitting for the verdict</h2>
+      <p class="lead">Confirmed identity + captured photos go in; <b>verification_status</b> comes out: <b>PASSED</b> (PNID) or <b>PENDING_REVIEW</b>.</p>
+      <div class="ep"><span class="method">POST</span><code class="big">/transaction/submit</code></div>
+      <h3>Body</h3>
+      <table class="spec"><tr><th>Field</th><th>Required</th><th>Meaning</th></tr>
+        <tr><td>id_information.code / .type / .id_number</td><td><span class="req">required</span></td><td>e.g. 3 / PNID / 000-000-000</td></tr>
+        <tr><td>id_information.expiration_date</td><td><span class="opt">optional</span></td><td>YYYY-MM-DD</td></tr>
+        <tr><td>personal_information.last_name / .first_name / .birthdate</td><td><span class="req">required</span></td><td>—</td></tr>
+        <tr><td>personal_information.suffix / .address</td><td><span class="opt">optional</span></td><td>Address object: line 1, barangay, city, province, zip</td></tr>
+        <tr><td>images.face_bio_base64 / .id_front_base64</td><td><span class="req">required</span></td><td>Captures</td></tr>
+        <tr><td>images.id_back_base64</td><td><span class="opt">optional</span></td><td>—</td></tr></table>
+      <div class="cols2">
+        <div><h3>Minimal valid body</h3>
+<pre class="code">{
+  "id_information": {
+    "code": "3", "type": "PNID",
+    "id_number": "000-000-000"
+  },
+  "personal_information": {
+    "last_name": "Dela Cruz",
+    "first_name": "Juan",
+    "birthdate": "1990-01-01"
+  },
+  "images": {
+    "face_bio_base64": "&lt;base64&gt;",
+    "id_front_base64": "&lt;base64&gt;"
+  }
+}</pre></div>
+        <div><h3>Sample responses</h3>
+<pre class="code">{
+  "verification_status": "PENDING_REVIEW",
+  "session_transaction_id": "c5a21976-…",
+  "create_at": "2026-09-18T09:57:00Z"
+}
+// PNID path:
+{ "verification_status": "PASSED", ... }</pre>
+        <div class="note"><b>Demo rule:</b> PNID → PASSED, anything else → PENDING_REVIEW. The wallet unlocks either way for demo purposes; the badge color tells them apart (blue seal vs yellow clock).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 ERRORS -->
+    <section class="g-sec" id="errors">
+      <div class="kicker">08 · Safety rails</div>
+      <h2>When things fail, they fail clearly</h2>
+      <p class="lead">Every failure is HTTP status + <code>error_code</code> + human message. The demo surfaces all three in the backend log.</p>
+      <table class="spec"><tr><th>HTTP</th><th>Code</th><th>What it means / what to do</th></tr>
+        <tr><td>400</td><td>INVALID_REQUEST</td><td>Malformed body/headers/JSON — fix the payload</td></tr>
+        <tr><td>400</td><td>INVALID_ID_TYPE</td><td>ID code unknown or outside contract scope</td></tr>
+        <tr><td>401</td><td>UNAUTHORIZED</td><td>Token missing/expired — re-login (§02)</td></tr>
+        <tr><td>403</td><td>FORBIDDEN</td><td>Token lacks scope or IP not allowed</td></tr>
+        <tr><td>405</td><td>METHOD_NOT_ALLOWED</td><td>Wrong HTTP verb</td></tr>
+        <tr><td>415</td><td>UNSUPPORTED_MEDIA_TYPE</td><td>Wrong Content-Type (json vs form-urlencoded)</td></tr>
+        <tr><td>422</td><td>INVALID_BIOMETRIC</td><td>Bad base64 or failed quality/liveness — recapture</td></tr>
+        <tr><td>429</td><td>LIMIT_EXCEEDED</td><td>Rate limit — back off and retry</td></tr>
+        <tr><td>502</td><td>REGISTRY_UNAVAILABLE</td><td>Downstream registry offline — retry later</td></tr>
+        <tr><td>502</td><td>UPSTREAM_ERROR</td><td>Processing dependency failed</td></tr>
+        <tr><td>500</td><td>SERVER_ERROR</td><td>Unexpected — escalate to SVI support</td></tr></table>
+    </section>
+
+    <!-- 10 IDS -->
+    <section class="g-sec" id="ids">
+      <div class="kicker">09 · Accepted IDs</div>
+      <h2>15 codes on the table</h2>
+      <p class="lead">Guide §10 lists 14; the demo adds <b>0 = Other</b> for anything the OCR can't classify. Contract scope applies: query only what our agreement covers.</p>
+      <table class="spec"><tr><th>Code</th><th>Type</th><th>Code</th><th>Type</th></tr>
+        <tr><td>0</td><td>OTHER_ID (demo)</td><td>8</td><td>TIN</td></tr>
+        <tr><td>1</td><td>PASSPORT</td><td>9</td><td>PWD_ID</td></tr>
+        <tr><td>2</td><td>PNID</td><td>10</td><td>SENIOR_CITIZEN_ID</td></tr>
+        <tr><td>3</td><td>PNID (ePhil ID)</td><td>11</td><td>PHILHEALTH</td></tr>
+        <tr><td>4</td><td>UMID</td><td>12</td><td>POSTAL_ID</td></tr>
+        <tr><td>5</td><td>PRC_ID</td><td>13</td><td>DRIVERS_LICENSE</td></tr>
+        <tr><td>6</td><td>SSS_ID</td><td>14</td><td>BATAENO_PASS</td></tr>
+        <tr><td>7</td><td>GSIS_ID</td><td></td><td></td></tr></table>
+    </section>
+
+    <!-- 11 DEMO -->
+    <section class="g-sec" id="demo">
+      <div class="kicker">10 · Proof</div>
+      <h2>The live demo maps 1:1</h2>
+      <p class="lead">Three columns: the customer app, the backend log, results + docs. Every screen calls exactly one endpoint.</p>
+      <table class="spec"><tr><th>App step</th><th>Endpoint</th><th>Evidence in demo</th></tr>
+        <tr><td>Send code / login</td><td>— (mock SMS)</td><td>Inbox panel, tap-to-fill OTP</td></tr>
+        <tr><td>Start verification</td><td>POST /auth/token → /transaction/create</td><td>TRN in session panel</td></tr>
+        <tr><td>Selfie</td><td>POST /liveness/passive</td><td>LIVE 82% chip</td></tr>
+        <tr><td>ID scan</td><td>POST /id/ocr</td><td>Auto-fill + detected type</td></tr>
+        <tr><td>Match / QR</td><td>POST /face-match/check · /verifications/qr</td><td>Side-by-side photos · decoded string</td></tr>
+        <tr><td>Confirm</td><td>POST /transaction/submit</td><td>Result screen + wallet unlock</td></tr></table>
+      <div class="cta-row"><a class="btn primary" href="index.html">Open the live demo</a></div>
+    </section>
+
+    <!-- 11 RECAP -->
+    <section class="g-sec finale" id="recap">
+      <div class="kicker">11 · Recap</div>
+      <div class="finale-grid">
+        <div class="finale-text">
+          <h2 class="svi-words"><span>Secure.</span> <span>Verified.</span> <span>Instant.</span></h2>
+          <p class="lead">Seven endpoints, one session ID, three questions answered<br />before PusoPay opens a wallet:</p>
+          <ol class="q-list">
+            <li><b>Are you live?</b><span>Selfie liveness clears photos of photos.</span></li>
+            <li><b>Is your ID real?</b><span>OCR reads it; the details are checked out.</span></li>
+            <li><b>Does your face match?</b><span>Selfie vs ID — or PNID QR instead.</span></li>
+          </ol>
+          <p class="lead">Three checks. Zero friction.<br />Selfie to wallet in one smooth flow.<br />That's PusoPay onboarding.</p>
+          <p class="muted">PusoPay demo · DigiCash eWallet · identity checks by SVI<br />base <code>https://verify.dev.svi.cloud/api/v1</code><br />PusoPay logo and other details are placeholders for demo purposes only — no real money was used.<br />Demo by Kevin G. Vega</p>
+          <div class="cta-row"><a class="btn primary" href="index.html">Back to demo</a><a class="btn ghost" href="#cover">Back to top ↑</a></div>
+        </div>
+        <aside class="finale-side">
+          <img class="finale-logo" src="PusoPay_Logo.png" alt="PusoPay logo" />
+          <p class="muted">PusoPay — an e-wallet for PWDs,<br />Senior Citizens, Solo Parents</p>
+        </aside>
+      </div>
+    </section>
+  </div>
+</div>
+<nav class="g-pagenav" aria-label="Section navigation">
+  <button class="btn ghost" id="gprev">‹ Prev</button>
+  <span id="gcount">1 / 12</span>
+  <button class="btn primary" id="gnext">Next ›</button>
+</nav>
+<script>
+  const links = [...document.querySelectorAll('.g-link')];
+  const secs = links.map((a) => document.querySelector(a.getAttribute('href')));
+  const prog = document.getElementById('gprog');
+  const crumb = document.getElementById('crumb');
+  const gcount = document.getElementById('gcount');
+  const gprev = document.getElementById('gprev');
+  const gnext = document.getElementById('gnext');
+  let cur = 0;
+  let navigating = false;
+  let navTimer = null;
+  function paint() {
+    links.forEach((a, k) => a.classList.toggle('on', k === cur));
+    if (links[cur]) crumb.textContent = links[cur].textContent.trim().replace(/\s+/g, ' ').replace(/^(\d+)\s*/, '$1 · ');
+    gcount.textContent = (cur + 1) + ' / ' + secs.length;
+    gprev.disabled = cur === 0;
+    gnext.disabled = cur === secs.length - 1;
+    const sc = window.scrollY / (document.body.scrollHeight - innerHeight);
+    prog.style.width = Math.round(Math.min(1, Math.max(0, sc)) * 100) + '%';
+  }
+  function go(n) {
+    cur = Math.min(secs.length - 1, Math.max(0, n));
+    paint();
+    navigating = true;
+    clearTimeout(navTimer);
+    navTimer = setTimeout(() => { navigating = false; }, 900);
+    if (secs[cur]) secs[cur].scrollIntoView({ behavior: 'smooth' });
+    if (document.activeElement?.blur) document.activeElement.blur();
+  }
+  gprev.onclick = () => go(cur - 1);
+  gnext.onclick = () => go(cur + 1);
+  document.addEventListener('keydown', (e) => {
+    if (e.repeat) return;
+    const tag = (e.target?.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  });
+  const io = new IntersectionObserver((es) => {
+    if (navigating) return;
+    es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const i = secs.indexOf(e.target);
+      if (i >= 0) { cur = i; paint(); }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  secs.forEach((s) => s && io.observe(s));
+  const finale = document.getElementById('recap');
+  const fio = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) { finale.classList.add('play'); fio.disconnect(); } });
+  }, { threshold: 0.3 });
+  if (finale) fio.observe(finale);
+  document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener('click', (e) => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  }));
+  function setTheme(t) {
+    document.documentElement.dataset.theme = t;
+    document.getElementById('themeLight').classList.toggle('active', t === 'light');
+    document.getElementById('themeDark').classList.toggle('active', t === 'dark');
+    try { localStorage.setItem('pusopay-theme', t); } catch {}
+  }
+  document.getElementById('themeLight').onclick = () => setTheme('light');
+  document.getElementById('themeDark').onclick = () => setTheme('dark');
+  setTheme(localStorage.getItem('pusopay-theme') || 'light');
+  paint();
+</script>
+</body>
+</html>

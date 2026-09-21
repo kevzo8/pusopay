@@ -29,10 +29,11 @@ module.exports = {
   pusopay: {
     brand: process.env.PUSOPAY_BRAND || 'PusoPay',
     issuer: process.env.PUSOPAY_ISSUER || 'DigiCash',
-    welcomeBalance: parseFloat(process.env.PUSOPAY_WELCOME_BALANCE || '5000')
+    welcomeBalance: parseFloat(process.env.PUSOPAY_WELCOME_BALANCE || '1000000')
   },
   // §10 Supported Identity Types
   idTypes: [
+    { code: '0', type: 'OTHER_ID' },
     { code: '1', type: 'PASSPORT' },
     { code: '2', type: 'PNID' },
     { code: '3', type: 'PNID (ePhil ID)' },

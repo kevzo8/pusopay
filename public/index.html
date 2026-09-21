@@ -10,6 +10,30 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+      <symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+      <symbol id="i-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.8-1.6 1.9-2.4 3-2.4s2.2.8 3 2.4M15 9.5h4M15 13h4"/></symbol>
+      <symbol id="i-face" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r=".5" fill="currentColor"/><circle cx="15" cy="10" r=".5" fill="currentColor"/><path d="M8.5 14.5a4 4 0 0 0 7 0"/></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-8h6v8"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.7 4H7.3a2 2 0 0 0-1.8 1.1z"/></symbol>
+      <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v.01M14 21v.01M21 21v.01M18 18h3v3h-3z"/></symbol>
+      <symbol id="i-bill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-2.3-1.5-2.4 1.5-2.3-1.5L9.7 21l-2.4-1.5L5 21z"/><path d="M9 8h6M9 12h6"/></symbol>
+      <symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0zM12 16v5"/></symbol>
+      <symbol id="i-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 8-6-16-3 8H2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
+      <symbol id="i-signal" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="15" width="3" height="5" rx="1"/><rect x="9" y="11" width="3" height="9" rx="1"/><rect x="14" y="7" width="3" height="13" rx="1"/><rect x="19" y="3" width="3" height="17" rx="1" opacity=".35"/></symbol>
+      <symbol id="i-batt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="8" width="17" height="8" rx="2"/><path d="M22 11v2" stroke-linecap="round"/><rect x="4" y="10" width="10" height="4" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    </defs>
+  </svg>
   <header class="topbar">
     <div class="brand">
       <img class="brand-logo" src="PusoPay_Logo.png" alt="PusoPay logo" />
@@ -20,8 +44,8 @@
     </div>
     <div class="top-actions">
       <div class="theme-toggle" role="group" aria-label="Theme">
-        <button id="themeLight" class="active">☀ Light</button>
-        <button id="themeDark">🌙 Dark</button>
+        <button id="themeLight" class="active"><svg class="ic"><use href="#i-sun"/></svg>Light</button>
+        <button id="themeDark"><svg class="ic"><use href="#i-moon"/></svg>Dark</button>
       </div>
     </div>
   </header>
@@ -31,19 +55,25 @@
     <section class="app-col">
       <div class="phone">
         <div class="notch"></div>
-        <div class="statusbar"><span id="phoneTime">9:41</span><span>📶 🔋</span></div>
+        <div class="statusbar"><span id="phoneTime">9:41</span><span class="sb-right"><svg class="ic"><use href="#i-signal"/></svg>5G<svg class="ic"><use href="#i-batt"/></svg></span></div>
 
         <!-- Welcome -->
         <div class="screen active" data-screen="welcome">
           <div class="app-hero">
             <img class="hero-logo" src="PusoPay_Logo.png" alt="PusoPay — an e-wallet for PWDs, Senior Citizens, Solo Parents" />
-            <p class="tagline">Cash in, send, and pay — verified in minutes.</p>
+            <p class="tagline">Cash in, send, and pay — made for PWDs, senior citizens, and solo parents.</p>
+            <div class="aud-chips">
+              <span><svg class="ic"><use href="#i-check"/></svg>PWD-friendly</span>
+              <span><svg class="ic"><use href="#i-user"/></svg>Senior-friendly</span>
+              <span><svg class="ic"><use href="#i-heart"/></svg>Solo parents</span>
+            </div>
           </div>
           <div class="pbar"><div class="pfill" style="width:8%"></div></div>
           <p class="stepcap">Welcome</p>
-          <button class="btn primary big" data-go="phone">Create free account</button>
-          <button class="btn ghost big" data-go="phone">Log in</button>
+          <button class="btn primary big" id="btnCreate">Create account</button>
+          <button class="btn ghost big" id="btnLogin">Log in</button>
           <p class="fine">Demo only — no real money moves here.</p>
+          <p class="trust-foot"><svg class="ic"><use href="#i-lock"/></svg>Secure · Verified · Instant — KYC onboarding by SVI</p>
         </div>
 
         <!-- Phone number -->
@@ -68,30 +98,32 @@
             <input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" />
             <input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" /><input maxlength="1" inputmode="numeric" />
           </div>
-          <button class="btn ghost big" id="btnFillOtp">⚡ Fill demo code for me</button>
+          <button class="btn ghost big" id="btnFillOtp">Fill demo code for me</button>
           <button class="btn primary big" id="btnVerifyOtp">Verify</button>
           <button class="btn ghost big" id="btnResend">Resend code</button>
         </div>
 
         <!-- KYC intro -->
         <div class="screen" data-screen="kycintro">
-          <h2>Verify your identity 🪪</h2>
+          <button class="back" data-go="otp">‹</button>
+          <h2>Verify your identity</h2>
           <p class="muted">SVI verifies you so PusoPay can unlock your wallet. About 2 minutes:</p>
           <div class="pbar"><div class="pfill" style="width:44%"></div></div>
           <p class="stepcap">Step 2 of 6 · Identity check</p>
           <div class="checklist">
-            <div>🤳 <b>Selfie liveness</b><span>Live camera — prove you're a real person</span></div>
-            <div>🪪 <b>Valid ID scan</b><span>Point your camera at the ID</span></div>
-            <div>🙂 <b>Face match</b><span>Selfie vs ID photo — or PNID QR</span></div>
+            <div><b><svg class="ic sm"><use href="#i-cam"/></svg>Selfie liveness</b><span>Live camera — prove you're a real person</span></div>
+            <div><b><svg class="ic sm"><use href="#i-id"/></svg>Valid ID scan</b><span>Point your camera at the ID</span></div>
+            <div><b><svg class="ic sm"><use href="#i-face"/></svg>Face match</b><span>Selfie vs ID photo — or PNID QR</span></div>
           </div>
           <button class="btn primary big" id="btnStartKyc">Start verification</button>
+          <p class="muted">Questions? Assisted onboarding is available for seniors and PWDs — big text, patient steps, no rush.</p>
           <pre class="mini-out" id="outTrn">Secure session not started.</pre>
         </div>
 
         <!-- Selfie (live camera) -->
         <div class="screen" data-screen="selfie">
           <button class="back" data-go="kycintro">‹</button>
-          <h2>Take a selfie 🤳</h2>
+          <h2>Take a selfie</h2>
           <p class="muted">Face the light, no sunglasses. The camera opens automatically.</p>
           <div class="pbar"><div class="pfill" style="width:56%"></div></div>
           <p class="stepcap">Step 3 of 6 · Selfie</p>
@@ -101,7 +133,7 @@
             <p class="muted hidden" id="selfieCamErr">Camera unavailable — upload a photo instead.</p>
           </div>
           <div class="row2">
-            <button class="btn primary big" id="btnSnapSelfie">📸 Capture</button>
+            <button class="btn primary big" id="btnSnapSelfie"><svg class="ic"><use href="#i-cam"/></svg>Capture</button>
             <button class="btn ghost big hidden" id="btnRetakeSelfie">↺ Retake</button>
           </div>
           <label class="uploadlink">or <u>upload a photo</u><input type="file" id="selfieFile" accept="image/*" hidden /></label>
@@ -114,7 +146,7 @@
         <!-- ID scan (live camera) -->
         <div class="screen" data-screen="idscan">
           <button class="back" data-go="selfie">‹</button>
-          <h2>Scan your ID 🪪</h2>
+          <h2>Scan your ID</h2>
           <p class="muted">Pick your ID type, then point the camera at the card and capture each side.</p>
           <div class="pbar"><div class="pfill" style="width:68%"></div></div>
           <p class="stepcap">Step 4 of 6 · ID</p>
@@ -128,7 +160,7 @@
             <p class="muted hidden" id="idCamErr">Camera unavailable — upload photos instead.</p>
           </div>
           <div class="row2">
-            <button class="btn primary big" id="btnSnapFront">📸 Capture front *</button>
+            <button class="btn primary big" id="btnSnapFront"><svg class="ic"><use href="#i-cam"/></svg>Capture front *</button>
             <button class="btn ghost big" id="btnSnapBack">+ Capture back</button>
           </div>
           <label class="uploadlink">or <u>upload photos</u>
@@ -147,7 +179,7 @@
         <!-- Face match / QR -->
         <div class="screen" data-screen="facematch">
           <button class="back" data-go="idscan">‹</button>
-          <h2>It's really you 🙂</h2>
+          <h2>It's really you</h2>
           <p class="muted">Match your selfie to your ID photo — or verify with a PNID QR instead.</p>
           <div class="pbar"><div class="pfill" style="width:80%"></div></div>
           <p class="stepcap">Step 5 of 6 · Match</p>
@@ -169,7 +201,7 @@
               <img id="qrPrev" class="preview" alt="QR image" />
             </div>
             <div class="row2">
-              <button class="btn ghost big" id="btnQrCam">📷 Scan live</button>
+              <button class="btn ghost big" id="btnQrCam"><svg class="ic"><use href="#i-cam"/></svg>Scan live</button>
               <button class="btn ghost big" id="btnQrSnap" disabled>◎ Capture &amp; decode</button>
             </div>
             <label class="uploadlink">or <u>upload QR image</u><input type="file" id="qrFile" accept="image/*" hidden /></label>
@@ -184,7 +216,7 @@
         <!-- Review -->
         <div class="screen" data-screen="review">
           <button class="back" data-go="facematch">‹</button>
-          <h2>Is this correct? 📝</h2>
+          <h2>Is this correct?</h2>
           <p class="muted">We read this from your ID. Fix anything wrong, then submit.</p>
           <div class="pbar"><div class="pfill" style="width:90%"></div></div>
           <p class="stepcap">Step 6 of 6 · Confirm</p>
@@ -192,7 +224,7 @@
             <div class="frow"><label>Last name<input id="f_last" /></label><label>First name<input id="f_first" /></label></div>
             <div class="frow"><label>Suffix<input id="f_suffix" placeholder="Jr / III" /></label><label>Birthdate<input id="f_bday" type="date" /></label></div>
             <label>ID number<input id="f_idnum" /></label>
-            <div class="frow"><label>ID type<input id="f_type" /></label><label>Expiry<input id="f_exp" type="date" /></label></div>
+            <div class="frow"><label>ID type<select id="f_type"></select></label><label>Expiry<input id="f_exp" type="date" /></label></div>
             <label>Address<input id="f_addr1" /></label>
             <div class="frow"><label>Barangay<input id="f_brgy" /></label><label>City<input id="f_city" /></label></div>
             <div class="frow"><label>Province<input id="f_prov" /></label><label>Zipcode<input id="f_zip" /></label></div>
@@ -203,23 +235,26 @@
 
         <!-- Processing / result -->
         <div class="screen" data-screen="result">
-          <h2 id="resTitle">Checking… ⏳</h2>
+          <button class="back" data-go="review">‹</button>
+          <h2 id="resTitle">Checking…</h2>
           <p class="muted" id="resSub">SVI is reviewing your submission.</p>
           <div class="pbar"><div class="pfill" style="width:100%"></div></div>
           <div id="resCard" class="res-card">…</div>
           <button class="btn primary big hidden" id="btnToWallet">Open my wallet →</button>
-          <button class="btn ghost big" id="btnRetry">↺ Start over</button>
+          <button class="btn ghost big" id="btnBackReview">← Edit details</button>
+          <button class="btn ghost big" id="btnRetry">↺ Start over (new session)</button>
         </div>
 
         <!-- Wallet home -->
         <div class="screen" data-screen="wallet">
-          <div class="w-head"><div><p class="muted">Kamusta,</p><h2 id="wName">Ka-Puso! 💛</h2></div><img class="avatar" src="PusoPay_Logo.png" alt="PusoPay" /></div>
+          <button class="back" data-go="result">‹</button>
+          <div class="w-head"><div><h2 class="w-name"><span id="wName">Ka-Puso</span><span id="wBadge" class="vbadge"></span></h2></div><img class="avatar" src="PusoPay_Logo.png" alt="PusoPay" /></div>
           <div class="kyc-banner" id="kycBanner">✔ Verified</div>
           <div class="balcard"><span>Available balance</span><strong id="wBalance">₱0.00</strong><span class="wnum" id="wNum">…</span></div>
           <div class="w-grid">
             <button id="btnCashIn">＋<span>Cash In</span></button>
             <button id="btnSend">⇄<span>Send</span></button>
-            <button id="btnQrShow">▦<span>My QR</span></button>
+            <button id="btnQrShow"><svg class="ic" style="width:22px;height:22px;margin:0 auto"><use href="#i-qr"/></svg><span>My QR</span></button>
             <button id="btnMore">•••<span>More</span></button>
           </div>
           <div class="sheet hidden" id="sheetCashIn">
@@ -235,24 +270,26 @@
           </div>
           <h3>Recent activity</h3>
           <div id="wHistory" class="history"><p class="muted">Nothing yet.</p></div>
-          <nav class="tabbar"><span class="on" data-tab="home">🏠 Home</span><span data-tab="qr">▦ QR</span><span data-tab="bills">🧾 Bills</span><span data-tab="me">👤 Me</span></nav>
+          <nav class="tabbar"><span class="on" data-tab="home"><svg class="ic"><use href="#i-home"/></svg>Home</span><span data-tab="qr"><svg class="ic"><use href="#i-qr"/></svg>QR</span><span data-tab="bills"><svg class="ic"><use href="#i-bill"/></svg>Bills</span><span data-tab="me"><svg class="ic"><use href="#i-user"/></svg>Me</span></nav>
+          <p class="trust-foot"><svg class="ic"><use href="#i-lock"/></svg>Secure · Verified · Instant — KYC onboarding by SVI</p>
         </div>
 
         <!-- Profile (from session captures + ID read) -->
         <div class="screen" data-screen="profile">
           <button class="back" data-go="wallet">‹</button>
-          <h2>Profile 👤</h2>
+          <h2>Profile</h2>
           <p class="muted">Your verified identity from this session.</p>
           <div class="prof-head">
-            <img id="pPhoto" class="prof-photo" alt="verified selfie" />
+            <img id="pPhoto" class="prof-photo" alt="verified selfie" style="display:none" />
             <div class="prof-id">
-              <h3 id="pName">—</h3>
+              <h3 class="w-name"><span id="pName">—</span><span id="pBadge" class="vbadge"></span></h3>
               <p class="muted" id="pPhone">—</p>
-              <div id="pStatus" class="chip idle">—</div>
             </div>
           </div>
           <div class="prof-list" id="pList"></div>
+          <button class="btn ghost big" id="btnLogout">Log out</button>
           <button class="btn ghost big" data-go="wallet">Back to wallet</button>
+          <nav class="tabbar"><span data-tab="home"><svg class="ic"><use href="#i-home"/></svg>Home</span><span data-tab="qr"><svg class="ic"><use href="#i-qr"/></svg>QR</span><span data-tab="bills"><svg class="ic"><use href="#i-bill"/></svg>Bills</span><span class="on" data-tab="me"><svg class="ic"><use href="#i-user"/></svg>Me</span></nav>
         </div>
       </div>
       <p class="caption">↑ The <b>PusoPay app</b> a customer installs. The middle column is the live backend · right column is results + docs.</p>
@@ -261,28 +298,29 @@
     <!-- ============ COL 2: backend live views ============ -->
     <section class="console-col">
       <details class="card" open>
-        <summary><h2>🧾 API activity <small id="apiCount">0 calls</small></h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-pulse"/></svg>API activity <small id="apiCount">0 calls</small></h2></summary>
         <div id="apiLog" class="apilog"><p class="muted">Every call the app makes appears here with timing + payload.</p></div>
       </details>
 
       <details class="card" open>
-        <summary><h2>📨 Mock SMS <small>inbox</small></h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-inbox"/></svg>Mock SMS <small>inbox</small></h2></summary>
         <div id="smsBox" class="muted">No messages yet — enter a number in the app.</div>
       </details>
 
       <details class="card" open>
-        <summary><h2>🔌 Live session info</h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-plug"/></svg>Live session info</h2></summary>
         <div class="kv"><span>API base</span><code id="sviBase">…</code></div>
         <div class="kv"><span>Session (TRN)</span><code id="trnLabel">— none —</code><button class="mini" id="btnCopyTrn">copy</button></div>
         <div class="kv"><span>Upstream</span><code id="healthLabel">checking…</code></div>
         <p class="muted">Secrets (client secret, API key, bearer token) never leave this server — the app calls <code>/api/kyc/*</code> and the server attaches credentials.</p>
+        <div class="row"><a class="btn ghost" href="guide.html"><svg class="ic"><use href="#i-book"/></svg>API guide presentation</a></div>
       </details>
     </section>
 
     <!-- ============ COL 3: results + docs ============ -->
     <section class="info-col">
       <details class="card" open>
-        <summary><h2>✅ Verification results</h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-check"/></svg>Verification results</h2></summary>
         <div class="chips">
           <div class="chip idle" id="cLive">Liveness —</div>
           <div class="chip idle" id="cOcr">ID read —</div>
@@ -293,7 +331,7 @@
       </details>
 
       <details class="card" open>
-        <summary><h2>🗂 Session data <small id="sessSync">local only</small></h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-folder"/></svg>Session data <small id="sessSync">local only</small></h2></summary>
         <div id="sessData" class="sessdata"><p class="muted">No session yet — start verification in the app.</p></div>
         <div class="row">
           <button id="btnToken" class="btn ghost">Get access token</button>
@@ -302,7 +340,7 @@
       </details>
 
       <details class="card">
-        <summary><h2>📖 API guide <small>which app step calls which endpoint</small></h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-book"/></svg>API guide <small>which app step calls which endpoint</small></h2></summary>
         <div class="map">
           <div><b>Login → token</b><code>POST /auth/token</code><span>Basic(client ID : secret) + API key → bearer, 15 min</span></div>
           <div><b>Start verification → session</b><code>POST /transaction/create</code><span>returns the session ID (TRN) used by every later call</span></div>
@@ -315,14 +353,14 @@
       </details>
 
       <details class="card">
-        <summary><h2>🪪 Accepted IDs &amp; error codes</h2></summary>
+        <summary><h2><svg class="ic"><use href="#i-id"/></svg>Accepted IDs &amp; error codes</h2></summary>
         <h3>Accepted IDs</h3><div id="idTypeTable" class="tbl">loading…</div>
         <h3>Error codes</h3><div id="errTable" class="tbl">loading…</div>
       </details>
     </section>
   </main>
 
-  <footer>PusoPay demo · DigiCash eWallet · identity checks by SVI · base <code>https://verify.dev.svi.cloud/api/v1</code> · demo only, don't use real PII in screenshots.</footer>
+  <footer>PusoPay demo · DigiCash eWallet · identity checks by SVI · base <code>https://verify.dev.svi.cloud/api/v1</code><br />PusoPay logo and other details are placeholders for demo purposes only — no real money was used.<br />Demo by Kevin G. Vega</footer>
   <div id="toast" class="toast"></div>
   <script src="vendor/jsQR.min.js"></script>
   <script src="app.js"></script>
