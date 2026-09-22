@@ -26,7 +26,10 @@
     .g-pagenav { position: fixed; bottom: 16px; right: 20px; display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 8px 10px; box-shadow: var(--shadow); z-index: 50; }
     .g-pagenav #gcount { font-size: 12px; font-weight: 800; color: var(--muted); min-width: 52px; text-align: center; }
     .g-pagenav .btn { padding: 9px 18px; }
-    .g-side .fine { margin-top: auto; padding: 10px 8px 0; }
+    .g-side .fine { margin: 12px 6px 0; }
+    .side-foot { display: grid; gap: 8px; margin-top: auto; padding: 12px 8px 0; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .side-foot p { margin: 0; }
+    .side-foot code { font-size: 10px; }
     /* ---- main ---- */
     .g-main { min-width: 0; padding: 0 0 80px; }
     .g-top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; padding: 12px 34px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
@@ -53,10 +56,12 @@
     .method { font-weight: 800; font-size: 13px; padding: 5px 12px; border-radius: 8px; background: #dff5e9; color: #0c5c3c; border: 1px solid #9adcb9; }
     .method.get { background: #e4ecff; color: #1e3fae; border-color: #b9c8f5; }
     .ep code.big { font-size: 15px; }
-    table.spec { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0 4px; }
-    table.spec th, table.spec td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    table.spec th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-    table.spec td:first-child { font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
+    table.spec { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 13.5px; margin: 14px 0 10px; }
+    table.spec th, table.spec td { text-align: left; padding: 12px 14px; vertical-align: top; }
+    table.spec th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding-bottom: 6px; }
+    table.spec td { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); line-height: 1.7; }
+    table.spec td:first-child { border-left: 1px solid var(--line); border-radius: 10px 0 0 10px; font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
+    table.spec td:last-child { border-right: 1px solid var(--line); border-radius: 0 10px 10px 0; }
     .req { color: #b42318; font-weight: 700; font-size: 11px; }
     .opt { color: var(--muted); font-size: 11px; }
     pre.code { background: #10142a; color: #e8ecff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font-size: 12.5px; line-height: 1.55; overflow-x: auto; }
@@ -131,13 +136,18 @@
     <a class="g-link" href="#demo"><span class="n">10</span>Live demo map</a>
     <a class="g-link" href="#recap"><span class="n">11</span>Recap</a>
     <p class="fine muted">Base: <code>verify.dev.svi.cloud/api/v1</code></p>
+    <div class="side-foot">
+      <p>PusoPay demo · DigiCash eWallet · identity checks by SVI.</p>
+      <p>PusoPay logo and other details are placeholders for demo purposes only — no real money was used.</p>
+    </div>
   </nav>
 
   <div class="g-main">
     <div class="g-top">
       <span class="crumb" id="crumb">00 · The Big Picture</span>
       <div class="spacer"></div>
-      <a class="btn ghost" href="index.html">Open demo</a>
+      <a class="btn primary" href="index.html">Live demo</a>
+      <a class="btn gold" href="https://screenrec.com/share/Y7hlNtFmyr" target="_blank" rel="noopener">Watch video demo</a>
       <div class="theme-toggle"><button id="themeLight" class="active">Light</button><button id="themeDark">Dark</button></div>
     </div>
 
@@ -149,8 +159,8 @@
       <div class="statrow">
         <div class="stat"><b>7</b><span>endpoints, one base URL</span></div>
         <div class="stat"><b>15 min</b><span>access-token lifetime</span></div>
-        <div class="stat"><b>80 / 75%</b><span>liveness / face-match bars</span></div>
-        <div class="stat"><b>15</b><span>ID types incl. Other</span></div>
+        <div class="stat"><b>100%</b><span>verification accuracy</span></div>
+        <div class="stat"><b>14</b><span>ID types supported</span></div>
       </div>
       <p class="sub"><b>PusoPay</b> owns the wallet and the customer screens. <b>SVI</b> owns identity proofing. The two sides meet at exactly one concept: the <b>TRN — a session ID</b> created up front and stapled to every photo and check.</p>
       <div class="flow">
@@ -163,6 +173,7 @@
       <div class="note"><b>Plain-English rule:</b> SVI answers three questions — <i>are you live, is your ID real, does your face match</i> — and PusoPay opens the wallet on a pass. PNID passes instantly; other IDs go to human review.</div>
       <div class="cta-row">
         <a class="btn primary" href="#auth">Start the briefing ↓</a>
+        <a class="btn gold" href="https://screenrec.com/share/Y7hlNtFmyr" target="_blank" rel="noopener">Watch video demo</a>
         <a class="btn ghost" href="index.html">Skip to live demo</a>
       </div>
     </section>
@@ -230,7 +241,7 @@
       <h3>Headers</h3>
       <table class="spec"><tr><th>Header</th><th>Value</th></tr>
         <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td></tr>
-        <tr><td>X-Transaction-Id</td><td>TRN from §03</td></tr>
+        <tr><td>X-Transaction-Id</td><td>TRN from Section 03</td></tr>
         <tr><td>x-api-key</td><td>Gateway key</td></tr></table>
       <h3>Body</h3>
       <table class="spec"><tr><th>Field</th><th>Required</th><th>Meaning</th></tr>
@@ -378,7 +389,7 @@
       <table class="spec"><tr><th>HTTP</th><th>Code</th><th>What it means / what to do</th></tr>
         <tr><td>400</td><td>INVALID_REQUEST</td><td>Malformed body/headers/JSON — fix the payload</td></tr>
         <tr><td>400</td><td>INVALID_ID_TYPE</td><td>ID code unknown or outside contract scope</td></tr>
-        <tr><td>401</td><td>UNAUTHORIZED</td><td>Token missing/expired — re-login (§02)</td></tr>
+        <tr><td>401</td><td>UNAUTHORIZED</td><td>Token missing/expired — re-login (Section 02)</td></tr>
         <tr><td>403</td><td>FORBIDDEN</td><td>Token lacks scope or IP not allowed</td></tr>
         <tr><td>405</td><td>METHOD_NOT_ALLOWED</td><td>Wrong HTTP verb</td></tr>
         <tr><td>415</td><td>UNSUPPORTED_MEDIA_TYPE</td><td>Wrong Content-Type (json vs form-urlencoded)</td></tr>
@@ -393,7 +404,7 @@
     <section class="g-sec" id="ids">
       <div class="kicker">09 · Accepted IDs</div>
       <h2>15 codes on the table</h2>
-      <p class="lead">Guide §10 lists 14; the demo adds <b>0 = Other</b> for anything the OCR can't classify. Contract scope applies: query only what our agreement covers.</p>
+      <p class="lead">Guide Section 10 lists 14; the demo adds <b>0 = Other</b> for anything the OCR can't classify. Contract scope applies: query only what our agreement covers.</p>
       <table class="spec"><tr><th>Code</th><th>Type</th><th>Code</th><th>Type</th></tr>
         <tr><td>0</td><td>OTHER_ID (demo)</td><td>8</td><td>TIN</td></tr>
         <tr><td>1</td><td>PASSPORT</td><td>9</td><td>PWD_ID</td></tr>
@@ -410,14 +421,14 @@
       <div class="kicker">10 · Proof</div>
       <h2>The live demo maps 1:1</h2>
       <p class="lead">Three columns: the customer app, the backend log, results + docs. Every screen calls exactly one endpoint.</p>
-      <table class="spec"><tr><th>App step</th><th>Endpoint</th><th>Evidence in demo</th></tr>
-        <tr><td>Send code / login</td><td>— (mock SMS)</td><td>Inbox panel, tap-to-fill OTP</td></tr>
-        <tr><td>Start verification</td><td>POST /auth/token → /transaction/create</td><td>TRN in session panel</td></tr>
-        <tr><td>Selfie</td><td>POST /liveness/passive</td><td>LIVE 82% chip</td></tr>
-        <tr><td>ID scan</td><td>POST /id/ocr</td><td>Auto-fill + detected type</td></tr>
-        <tr><td>Match / QR</td><td>POST /face-match/check · /verifications/qr</td><td>Side-by-side photos · decoded string</td></tr>
-        <tr><td>Confirm</td><td>POST /transaction/submit</td><td>Result screen + wallet unlock</td></tr></table>
-      <div class="cta-row"><a class="btn primary" href="index.html">Open the live demo</a></div>
+      <table class="spec"><tr><th>App step</th><th><span class="who pp">PUSOPAY</span> route</th><th><span class="who svi">SVI</span> upstream</th><th>Evidence in demo</th></tr>
+        <tr><td>Send code / login</td><td>mock SMS <span class="muted">· local only</span></td><td>—</td><td>Inbox panel, tap-to-fill OTP</td></tr>
+        <tr><td>Start verification</td><td><code>POST /api/kyc/token</code><br /><code>POST /api/kyc/transaction/create</code></td><td><code>POST /auth/token</code><br /><code>POST /transaction/create</code></td><td>TRN in session panel</td></tr>
+        <tr><td>Selfie</td><td><code>POST /api/kyc/liveness/passive</code></td><td><code>POST /liveness/passive</code></td><td>LIVE 82% chip</td></tr>
+        <tr><td>ID scan</td><td><code>POST /api/kyc/id/ocr</code></td><td><code>POST /id/ocr</code></td><td>Auto-fill + detected type</td></tr>
+        <tr><td>Match / QR</td><td><code>POST /api/kyc/face-match/check</code><br /><code>POST /api/kyc/verifications/qr</code></td><td><code>POST /face-match/check</code><br /><code>POST /verifications/qr</code></td><td>Side-by-side photos · decoded string</td></tr>
+        <tr><td>Confirm</td><td><code>POST /api/kyc/transaction/submit</code></td><td><code>POST /transaction/submit</code></td><td>Result screen + wallet unlock</td></tr></table>
+      <div class="cta-row"><a class="btn primary" href="index.html">Open the live demo</a><a class="btn gold" href="https://screenrec.com/share/Y7hlNtFmyr" target="_blank" rel="noopener">Watch video demo</a></div>
     </section>
 
     <!-- 11 RECAP -->
@@ -433,8 +444,8 @@
             <li><b>Does your face match?</b><span>Selfie vs ID — or PNID QR instead.</span></li>
           </ol>
           <p class="lead">Three checks. Zero friction.<br />Selfie to wallet in one smooth flow.<br />That's DigiCash's PusoPay onboarding, powered by SVI.</p>
-          <p class="muted">PusoPay demo · DigiCash eWallet · identity checks by SVI<br />base <code>https://verify.dev.svi.cloud/api/v1</code><br />PusoPay logo and other details are placeholders for demo purposes only — no real money was used.<br />This API is made possible by the great teamwork and collaboration of the SVI-SSC Software Product Division 3 Team 2 (Hazel, Kevin, Kian, Kiko, Louie, Nathan, Niana, Baron, Chris).<br />Demo by Kevin G. Vega</p>
-          <div class="cta-row"><a class="btn primary" href="index.html">Back to demo</a><a class="btn ghost" href="#cover">Back to top ↑</a></div>
+          <p class="muted">This API is made possible by the great teamwork and collaboration of the SVI-SSC Software Product Division 3 Team 2 (Hazel, Kevin, Kian, Kiko, Louie, Nathan, Niana, Baron, Chris, Mhera).<br />Demo by Kevin G. Vega</p>
+          <div class="cta-row"><a class="btn primary" href="index.html">Back to demo</a><a class="btn gold" href="https://screenrec.com/share/Y7hlNtFmyr" target="_blank" rel="noopener">Watch video demo</a><a class="btn ghost" href="#cover">Back to top ↑</a></div>
         </div>
         <aside class="finale-side">
           <img class="finale-logo" src="PusoPay_Logo.png" alt="PusoPay logo" />

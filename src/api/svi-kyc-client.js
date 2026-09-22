@@ -3,7 +3,7 @@ const config = require('../config');
 
 /**
  * SVI PusoPay Onboarding KYC API client.
- * Implements SVI_PusoPay_API_Guide_v1.0.0 §§2–8 + /health.
+ * Implements SVI_PusoPay_API_Guide_v1.0.0 Sections 2–8 + /health.
  *
  * Base URL: https://verify.dev.svi.cloud/api/v1
  *
@@ -26,7 +26,7 @@ class SviKycClient {
     this.http = axios.create({
       baseURL: this.baseUrl,
       timeout: 60000,
-      validateStatus: () => true // we surface API error bodies ourselves (§9)
+      validateStatus: () => true // we surface API error bodies ourselves (Section 9)
     });
   }
 
@@ -43,7 +43,7 @@ class SviKycClient {
   }
 
   authHeaders(extra = {}) {
-    if (!this._token) throw new Error('No access token. Call getAccessToken() first (Guide §2).');
+    if (!this._token) throw new Error('No access token. Call getAccessToken() first (Guide Section 2).');
     return {
       Authorization: `Bearer ${this._token}`,
       'x-api-key': this.apiKey,
@@ -69,7 +69,7 @@ class SviKycClient {
     throw err;
   }
 
-  // ---------- §2 Authentication ----------
+  // ---------- Section 2 Authentication ----------
 
   /**
    * POST /auth/token — OAuth2 client_credentials.
@@ -118,11 +118,11 @@ class SviKycClient {
     return { httpStatus: res.status, body: res.data };
   }
 
-  // ---------- §3 Create Transaction ----------
+  // ---------- Section 3 Create Transaction ----------
 
   /**
    * POST /transaction/create — no body. Returns { transaction_id } (UUID/TRN).
-   * This TRN goes into `X-Transaction-Id` for §§4–8.
+   * This TRN goes into `X-Transaction-Id` for Sections 4–8.
    */
   async createTransaction() {
     await this.ensureToken();
@@ -134,7 +134,7 @@ class SviKycClient {
     return SviKycClient.throwIfApiError(res, 'transaction/create');
   }
 
-  // ---------- §4 Passive Liveness Check ----------
+  // ---------- Section 4 Passive Liveness Check ----------
 
   /**
    * POST /liveness/passive — { image } → { status, results: { passed, confidence_score, threshold=0.80 } }
@@ -152,7 +152,7 @@ class SviKycClient {
     return SviKycClient.throwIfApiError(res, 'liveness/passive');
   }
 
-  // ---------- §5 Identity Document OCR ----------
+  // ---------- Section 5 Identity Document OCR ----------
 
   /**
    * POST /id/ocr — { id_front_base64, id_back_base64? } → { status, extracted_information: {...} }
@@ -169,7 +169,7 @@ class SviKycClient {
     return SviKycClient.throwIfApiError(res, 'id/ocr');
   }
 
-  // ---------- §6 ID and Face Match ----------
+  // ---------- Section 6 ID and Face Match ----------
 
   /**
    * POST /face-match/check — { face_bio_base64, id_base64 }
@@ -190,7 +190,7 @@ class SviKycClient {
     return SviKycClient.throwIfApiError(res, 'face-match/check');
   }
 
-  // ---------- §7 PNID QR Verification ----------
+  // ---------- Section 7 PNID QR Verification ----------
 
   /**
    * POST /verifications/qr — { qr_value, face_biometric_base64 } → { status, is_verified }
@@ -211,7 +211,7 @@ class SviKycClient {
     return SviKycClient.throwIfApiError(res, 'verifications/qr');
   }
 
-  // ---------- §8 Submit Transaction ----------
+  // ---------- Section 8 Submit Transaction ----------
 
   /**
    * POST /transaction/submit — confirmed identity + images for final KYC processing.
@@ -220,13 +220,13 @@ class SviKycClient {
   async submitTransaction({ transactionId, idInformation, personalInformation, images }) {
     if (!transactionId) throw new Error('transactionId (TRN) is required (X-Transaction-Id).');
     if (!idInformation?.code || !idInformation?.type || !idInformation?.id_number) {
-      throw new Error('idInformation.code, .type, .id_number are required (§8).');
+      throw new Error('idInformation.code, .type, .id_number are required (Section 8).');
     }
     if (!personalInformation?.last_name || !personalInformation?.first_name || !personalInformation?.birthdate) {
-      throw new Error('personalInformation.last_name, .first_name, .birthdate are required (§8).');
+      throw new Error('personalInformation.last_name, .first_name, .birthdate are required (Section 8).');
     }
     if (!images?.face_bio_base64 || !images?.id_front_base64) {
-      throw new Error('images.face_bio_base64 and images.id_front_base64 are required (§8).');
+      throw new Error('images.face_bio_base64 and images.id_front_base64 are required (Section 8).');
     }
     await this.ensureToken();
     const body = {
@@ -249,13 +249,13 @@ class SviKycClient {
   // ---------- Overview mentions without a spec section ----------
 
   /**
-   * "Get KYC Result" and "Transaction Image Upload" are listed in §1 Overview
+   * "Get KYC Result" and "Transaction Image Upload" are listed in Section 1 Overview
    * but have no request/response spec in v1.0.0. The demo server persists the
    * submit response locally and exposes it via its own /api/kyc/result/:trn
    * endpoint. If SVI publishes these paths later, implement them here.
    */
   getUnspecifiedNote() {
-    return 'Get KYC Result / Transaction Image Upload are listed in Guide §1 but unspecified in v1.0.0 — tracked locally by the demo server.';
+    return 'Get KYC Result / Transaction Image Upload are listed in Guide Section 1 but unspecified in v1.0.0 — tracked locally by the demo server.';
   }
 }
 

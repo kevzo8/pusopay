@@ -12,14 +12,14 @@ module.exports = {
     clientSecret: process.env.SVI_CLIENT_SECRET,
     apiKey: process.env.SVI_API_KEY,
     endpoints: {
-      token: '/auth/token',            // §2  POST
-      create: '/transaction/create',    // §3  POST
-      liveness: '/liveness/passive',    // §4  POST
-      ocr: '/id/ocr',                   // §5  POST (§5 shows "/id/ocr/" — trailing slash also accepted server-side)
-      faceMatch: '/face-match/check',   // §6  POST
-      qr: '/verifications/qr',          // §7  POST
-      submit: '/transaction/submit',    // §8  POST
-      health: '/health'                 // §2 table GET (unauthenticated)
+      token: '/auth/token',            // Section 2  POST
+      create: '/transaction/create',    // Section 3  POST
+      liveness: '/liveness/passive',    // Section 4  POST
+      ocr: '/id/ocr',                   // Section 5  POST (Section 5 shows "/id/ocr/" — trailing slash also accepted server-side)
+      faceMatch: '/face-match/check',   // Section 6  POST
+      qr: '/verifications/qr',          // Section 7  POST
+      submit: '/transaction/submit',    // Section 8  POST
+      health: '/health'                 // Section 2 table GET (unauthenticated)
     }
   },
   server: {
@@ -31,7 +31,7 @@ module.exports = {
     issuer: process.env.PUSOPAY_ISSUER || 'DigiCash',
     welcomeBalance: parseFloat(process.env.PUSOPAY_WELCOME_BALANCE || '1000000')
   },
-  // §10 Supported Identity Types
+  // Section 10 Supported Identity Types
   idTypes: [
     { code: '0', type: 'OTHER_ID' },
     { code: '1', type: 'PASSPORT' },
@@ -49,10 +49,10 @@ module.exports = {
     { code: '13', type: 'DRIVERS_LICENSE' },
     { code: '14', type: 'BATAENO_PASS' }
   ],
-  // §9 Error Codes
+  // Section 9 Error Codes
   errorCodes: {
     INVALID_REQUEST: { http: 400, hint: 'Missing/malformed body fields, header validation failures, or incorrect JSON formatting.' },
-    INVALID_ID_TYPE: { http: 400, hint: 'id_type_code unrecognized, inactive, or not in your contract scope (§10).' },
+    INVALID_ID_TYPE: { http: 400, hint: 'id_type_code unrecognized, inactive, or not in your contract scope (Section 10).' },
     UNAUTHORIZED: { http: 401, hint: 'Bearer token missing, expired, or invalid. Re-authenticate via /auth/token.' },
     FORBIDDEN: { http: 403, hint: 'Token lacks biometric.verify scope or IP not allowed.' },
     METHOD_NOT_ALLOWED: { http: 405, hint: 'Invalid HTTP verb for the endpoint.' },

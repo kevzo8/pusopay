@@ -40,7 +40,7 @@ function forwardError(res, err, fallback = 500) {
   return res.status(status).json({ status: 'error', message: err.message, httpStatus: status });
 }
 
-// ---- config / reference data (Guide §§9–10) ----
+// ---- config / reference data (Guide Sections 9–10) ----
 router.get('/config', (req, res) => {
   res.json({
     brand: config.pusopay.brand,
@@ -57,7 +57,7 @@ router.get('/config', (req, res) => {
   });
 });
 
-// ---- Guide §: /health (unauthenticated, proxied for the demo UI) ----
+// ---- Guide endpoints table: /health (unauthenticated, proxied for the demo UI) ----
 router.get('/health', async (req, res) => {
   try {
     const result = await global.svi.health();
@@ -67,7 +67,7 @@ router.get('/health', async (req, res) => {
   }
 });
 
-// ---- Guide §2: token (cached server-side; secrets never leave the backend) ----
+// ---- Guide Section 2: token (cached server-side; secrets never leave the backend) ----
 router.post('/token', async (req, res) => {
   try {
     const force = req.query.refresh === '1' || req.body?.refresh === true;
@@ -78,7 +78,7 @@ router.post('/token', async (req, res) => {
   }
 });
 
-// ---- Guide §3: create transaction ----
+// ---- Guide Section 3: create transaction ----
 router.post('/transaction/create', async (req, res) => {
   try {
     const data = await global.svi.createTransaction();
@@ -89,7 +89,7 @@ router.post('/transaction/create', async (req, res) => {
   }
 });
 
-// ---- Guide §4: passive liveness ----
+// ---- Guide Section 4: passive liveness ----
 router.post('/liveness/passive', async (req, res) => {
   try {
     const trn = req.header('X-Transaction-Id') || req.body.transactionId;
@@ -102,7 +102,7 @@ router.post('/liveness/passive', async (req, res) => {
   }
 });
 
-// ---- Guide §5: ID OCR ----
+// ---- Guide Section 5: ID OCR ----
 router.post('/id/ocr', async (req, res) => {
   try {
     const trn = req.header('X-Transaction-Id') || req.body.transactionId;
@@ -120,7 +120,7 @@ router.post('/id/ocr', async (req, res) => {
   }
 });
 
-// ---- Guide §6: face match (captured selfie vs captured ID front) ----
+// ---- Guide Section 6: face match (captured selfie vs captured ID front) ----
 router.post('/face-match/check', async (req, res) => {
   try {
     const trn = req.header('X-Transaction-Id') || req.body.transactionId;
@@ -138,7 +138,7 @@ router.post('/face-match/check', async (req, res) => {
   }
 });
 
-// ---- Guide §7: PNID QR verification ----
+// ---- Guide Section 7: PNID QR verification ----
 router.post('/verifications/qr', async (req, res) => {
   try {
     const trn = req.header('X-Transaction-Id') || req.body.transactionId;
@@ -158,7 +158,7 @@ router.post('/verifications/qr', async (req, res) => {
   }
 });
 
-// ---- Guide §8: submit transaction ----
+// ---- Guide Section 8: submit transaction ----
 router.post('/transaction/submit', async (req, res) => {
   try {
     const trn = req.header('X-Transaction-Id') || req.body.transactionId || req.body.session_transaction_id;
@@ -211,7 +211,7 @@ router.get('/session/:trn', (req, res) => {
   });
 });
 
-// ---- Local "Get KYC Result" (Guide §1 lists it; v1.0.0 has no spec — served from demo store) ----
+// ---- Local "Get KYC Result" (Guide Section 1 lists it; v1.0.0 has no spec — served from demo store) ----
 router.get('/result/:trn', (req, res) => {
   const s = sessions.get(req.params.trn);
   if (!s) return res.status(404).json({ status: 'error', error_code: 'INVALID_REQUEST', message: 'Unknown TRN in demo store.', httpStatus: 404 });

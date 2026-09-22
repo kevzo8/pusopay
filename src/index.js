@@ -29,15 +29,15 @@ app.get('/api', (req, res) => {
     guide: 'SVI_PusoPay_API_Guide_v1.0.0',
     sviBaseUrl: config.svi.baseUrl,
     kyc: {
-      'POST /api/kyc/transaction/create': 'Guide §3 — new TRN',
-      'POST /api/kyc/liveness/passive': 'Guide §4 — { image } + X-Transaction-Id',
-      'POST /api/kyc/id/ocr': 'Guide §5 — { id_front_base64, id_back_base64? }',
-      'POST /api/kyc/face-match/check': 'Guide §6 — { face_bio_base64, id_base64 }',
-      'POST /api/kyc/verifications/qr': 'Guide §7 — { qr_value, face_biometric_base64 }',
-      'POST /api/kyc/transaction/submit': 'Guide §8 — confirmed identity + images',
+      'POST /api/kyc/transaction/create': 'Guide Section 3 — new TRN',
+      'POST /api/kyc/liveness/passive': 'Guide Section 4 — { image } + X-Transaction-Id',
+      'POST /api/kyc/id/ocr': 'Guide Section 5 — { id_front_base64, id_back_base64? }',
+      'POST /api/kyc/face-match/check': 'Guide Section 6 — { face_bio_base64, id_base64 }',
+      'POST /api/kyc/verifications/qr': 'Guide Section 7 — { qr_value, face_biometric_base64 }',
+      'POST /api/kyc/transaction/submit': 'Guide Section 8 — confirmed identity + images',
       'GET /api/kyc/result/:trn': 'Local demo store (Guide lists Get KYC Result without spec)',
       'GET /api/kyc/health': 'Upstream GET /health (unauthenticated)',
-      'POST /api/kyc/token': 'Guide §2 (cached; token truncated in response)'
+      'POST /api/kyc/token': 'Guide Section 2 (cached; token truncated in response)'
     },
     wallet: {
       'GET /api/wallet/:walletId': 'Mock eWallet ledger',
