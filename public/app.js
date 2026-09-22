@@ -57,7 +57,14 @@ function snapToBase64(video, canvas) {
   const scale = Math.min(1, 960 / Math.max(vw, vh));
   canvas.width = Math.round(vw * scale);
   canvas.height = Math.round(vh * scale);
-  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext('2d');
+  // Mirror the capture when the preview is mirrored, so the photo
+  // matches what the user just saw (no awkward flip).
+  if (video.classList.contains('mirror')) {
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+  }
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   const url = canvas.toDataURL('image/jpeg', 0.85);
   return url.slice(url.indexOf('base64,') + 7);
 }
