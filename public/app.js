@@ -126,6 +126,19 @@ document.querySelectorAll('.tab').forEach((t) => (t.onclick = () => {
 }));
 
 /* ---------- backend console log ---------- */
+function escHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function truncDeep(v) {
+  if (typeof v === 'string') return v.length > 300 ? v.slice(0, 60) + `…[${v.length} chars]` : v;
+  if (Array.isArray(v)) return v.map(truncDeep);
+  if (v && typeof v === 'object') {
+    const o = {};
+    for (const k in v) o[k] = truncDeep(v[k]);
+    return o;
+  }
+  return v;
+}
 /* Owner map: PusoPay (DigiCash) demo routes → SVI upstream they proxy.
    String = upstream SVI call; {local} = handled entirely by this demo. */
 const UPSTREAM = {
@@ -148,18 +161,22 @@ function upstreamOf(path) {
   return { local: 'local only' };
 }
 
-function logCall({ label, endpoint, ms, ok, body }) {
+function logCall({ label, endpoint, ms, ok, body, req }) {
   S.calls += 1;
   $('apiCount').textContent = `${S.calls} call${S.calls === 1 ? '' : 's'}`;
   const up = upstreamOf(endpoint.replace(/^[A-Z]+ /, ''));
   const routeHtml = up.svi
     ? `<div class="route"><span class="who pp">PUSOPAY</span><code>${endpoint}</code></div><div class="route"><span class="who svi">SVI</span><code>${up.svi}</code><span class="arr">↑ upstream</span></div>`
     : `<div class="route"><span class="who pp">PUSOPAY</span><code>${endpoint}</code></div><div class="muted">${up.local}</div>`;
-  const b = document.createElement('button');
+  const b = document.createElement('div');
   b.className = 'api-row';
   b.innerHTML = `<div class="t"><b>${label}</b><span class="badge ${ok ? 'ok' : 'bad'}">${ok ? 'OK' : 'FAIL'} · ${ms}ms</span></div>
-    <div class="muted">${new Date().toLocaleTimeString()}</div>${routeHtml}`;
-  b.onclick = () => { $('outDetail').textContent = typeof body === 'string' ? body : JSON.stringify(body, null, 2); };
+    <div class="muted">${new Date().toLocaleTimeString()}</div>${routeHtml}
+    <div class="api-detail"><b>Request</b><pre>${escHtml(JSON.stringify(truncDeep(req ?? {}), null, 2))}</pre><b>Response</b><pre>${escHtml(typeof body === 'string' ? body : JSON.stringify(body, null, 2))}</pre></div>`;
+  b.onclick = () => {
+    b.classList.toggle('open');
+    $('outDetail').textContent = typeof body === 'string' ? body : JSON.stringify(body, null, 2);
+  };
   const log = $('apiLog');
   if (S.calls === 1) log.innerHTML = '';
   log.prepend(b);
@@ -173,11 +190,11 @@ async function api(label, endpoint, { method = 'GET', body } = {}) {
     const res = await fetch(endpoint, { method, headers, body: body ? JSON.stringify(body) : undefined });
     const data = await res.json().catch(() => ({}));
     const ms = Math.round(performance.now() - t0);
-    logCall({ label, endpoint: `${method} ${endpoint}`, ms, ok: res.ok, body: data });
+    logCall({ label, endpoint: `${method} ${endpoint}`, ms, ok: res.ok, body: data, req: body || null });
     if (!res.ok) { const e = new Error(data.message || `HTTP ${res.status}`); e.body = data; throw e; }
     return data;
   } catch (e) {
-    if (!e.body) logCall({ label, endpoint: `${method} ${endpoint}`, ms: Math.round(performance.now() - t0), ok: false, body: { message: e.message } });
+    if (!e.body) logCall({ label, endpoint: `${method} ${endpoint}`, ms: Math.round(performance.now() - t0), ok: false, body: { message: e.message }, req: body || null });
     throw e;
   }
 }
@@ -237,7 +254,7 @@ async function renderSessionData() {
     kv.push(['Full name', [p.first_name, p.last_name].filter(Boolean).join(' ') || '—']);
     kv.push(['ID', `${(id.type || '—').replace(/_/g, ' ')} · ${id.id_number || '—'}`]);
     kv.push(['Birthdate', p.birthdate || '—']);
-    kv.push(['Address', [a.address_line_1, a.barangay, a.city_municipality, a.province, a.zipcode].filter(Boolean).join(', ') || '—']);
+    kv.push(['Address', [a.address_line_1 || a.address_line1, a.barangay, a.city_municipality, a.province, a.zipcode].filter(Boolean).join(', ') || '—']);
   }
   if (S.submit) kv.push(['Decision', S.submit.verification_status]);
   el.innerHTML = `
@@ -600,7 +617,7 @@ function autofill() {
   if (p.suffix) $('f_suffix').value = p.suffix;
   if (p.birthdate) $('f_bday').value = String(p.birthdate).slice(0, 10);
   const a = typeof p.address === 'object' && p.address ? p.address : {};
-  if (a.address_line_1) $('f_addr1').value = a.address_line_1;
+  if (a.address_line_1 || a.address_line1) $('f_addr1').value = a.address_line_1 || a.address_line1;
   if (a.barangay) $('f_brgy').value = a.barangay;
   if (a.city_municipality) $('f_city').value = a.city_municipality;
   if (a.province) $('f_prov').value = a.province;
@@ -623,8 +640,11 @@ $('btnSubmit').onclick = () => withBusy('btnSubmit', async () => {
       birthdate: $('f_bday').value,
       // address_line1 is always required by /transaction/submit — send the
       // object every time, empty strings when the applicant left blanks.
+      // NOTE: the dev backend actually validates the "address_line_1"
+      // spelling (despite the error naming "address_line1"), so send both.
       address: {
         address_line1: $('f_addr1').value.trim(),
+        address_line_1: $('f_addr1').value.trim(),
         barangay: $('f_brgy').value.trim(),
         city_municipality: $('f_city').value.trim(),
         province: $('f_prov').value.trim(),
@@ -635,6 +655,8 @@ $('btnSubmit').onclick = () => withBusy('btnSubmit', async () => {
   };
   if (!payload.id_information.id_number || !payload.personal_information.last_name || !payload.personal_information.first_name || !payload.personal_information.birthdate)
     return toast('ID number, names, and birthdate are required.');
+  if (!payload.personal_information.address.address_line1)
+    return toast('Address line 1 is required by SVI — fill it before submitting.');
   go('result');
   $('resTitle').textContent = 'Checking…';
   $('resSub').textContent = 'SVI is reviewing your submission.';
@@ -699,7 +721,7 @@ function renderProfile() {
   $('pName').textContent = [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Unverified user';
   $('pPhone').textContent = S.phone || 'No number';
   setBadge($('pBadge'), S.submit?.verification_status);
-  const addr = [a.address_line_1, a.barangay, a.city_municipality, a.province, a.zipcode].filter(Boolean).join(', ') || '—';
+  const addr = [a.address_line_1 || a.address_line1, a.barangay, a.city_municipality, a.province, a.zipcode].filter(Boolean).join(', ') || '—';
   const rows = [
     ['ID', `${id.type || '—'}${id.id_number ? ' · ' + id.id_number : ''}`],
     ['Birthdate', p.birthdate || '—'],

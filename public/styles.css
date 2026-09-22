@@ -203,6 +203,10 @@ code { background: var(--out); border: 1px solid var(--line); padding: 2px 8px; 
 .route .arr { color: var(--muted); }
 .apilog { display: grid; gap: 8px; max-height: 340px; overflow-y: auto; scrollbar-width: thin; padding-right: 2px; }
 .api-row { display: grid; gap: 4px; background: var(--card2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 12px; cursor: pointer; text-align: left; width: 100%; color: var(--txt); font-family: var(--font); }
+.api-detail { display: none; margin-top: 6px; }
+.api-row.open .api-detail { display: grid; gap: 6px; }
+.api-detail > b { font-size: 11px; color: var(--muted); }
+.api-detail pre { background: var(--out); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 11px; line-height: 1.5; max-height: 220px; overflow: auto; white-space: pre-wrap; word-break: break-word; margin: 0; }
 .api-row:hover { border-color: var(--acc); }
 .api-row .t { display: flex; justify-content: space-between; gap: 8px; }
 .badge { font-weight: 800; padding: 1px 8px; border-radius: 12px; font-size: 11px; white-space: nowrap; }
