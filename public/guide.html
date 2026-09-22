@@ -103,6 +103,8 @@
     .q-list li { display: flex; gap: 14px; align-items: baseline; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; font-size: 17px; counter-increment: q; }
     .q-list li::before { content: counter(q, decimal-leading-zero); font-weight: 800; font-size: 13px; color: var(--acc); }
     .q-list li span { color: var(--muted); font-size: 14px; }
+    .credit { font-size: 12px !important; }
+    .credit-by { font-size: 12px !important; margin-top: 12px; font-weight: 700; }
     @media (max-width: 900px) {
       .g-shell { grid-template-columns: 1fr; }
       .g-side { position: static; height: auto; flex-direction: row; align-items: center; overflow-x: auto; padding: 10px; }
@@ -444,7 +446,8 @@
             <li><b>Does your face match?</b><span>Selfie vs ID — or PNID QR instead.</span></li>
           </ol>
           <p class="lead">Three checks. Zero friction.<br />Selfie to wallet in one smooth flow.<br />That's DigiCash's PusoPay onboarding, powered by SVI.</p>
-          <p class="muted">This API is made possible by the great teamwork and collaboration of the SVI-SSC Software Product Division 3 Team 2 (Hazel, Kevin, Kian, Kiko, Louie, Nathan, Niana, Baron, Chris, Mhera).<br />Demo by Kevin G. Vega</p>
+          <p class="muted credit">This API is made possible by the great teamwork and collaboration of the SVI-SSC Software Product Division 3 Team 2 (Hazel, Kevin, Kian, Kiko, Louie, Nathan, Niana, Baron, Chris, Mhera) — thanks to their great agility, flexibility, and good pivots and adaptation to reprioritizing tickets mid-sprint.</p>
+          <p class="muted credit-by">Demo by Kevin G. Vega</p>
           <div class="cta-row"><a class="btn primary" href="index.html">Back to demo</a><a class="btn gold" href="https://screenrec.com/share/Y7hlNtFmyr" target="_blank" rel="noopener">Watch video demo</a><a class="btn ghost" href="#cover">Back to top ↑</a></div>
         </div>
         <aside class="finale-side">
