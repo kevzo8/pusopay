@@ -22,7 +22,8 @@ body {
   letter-spacing: -0.011em;
 }
 h1, h2, h3 { letter-spacing: -0.02em; }
-.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 22px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 22px; flex-wrap: wrap; }
+.top-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .brand { display: flex; gap: 12px; align-items: center; }
 .brand-logo { width: 48px; height: 48px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow); background: #fff; }
 .brand h1 { margin: 0; font-size: 22px; font-weight: 700; }
