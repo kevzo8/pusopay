@@ -140,7 +140,7 @@
           <canvas id="selfieCanvas" hidden></canvas>
           <div id="liveChip" class="chip idle">Liveness: not run</div>
           <button class="btn primary big" id="btnLiveness">Check liveness</button>
-          <button class="btn ghost big" data-go="idscan" id="btnToId" disabled>Continue →</button>
+          <button class="btn gold big" data-go="idscan" id="btnToId" disabled>Continue →</button>
         </div>
 
         <!-- ID scan (live camera) -->
@@ -173,7 +173,7 @@
           </div>
           <canvas id="idCanvas" hidden></canvas>
           <button class="btn primary big" id="btnOcr">Read my ID</button>
-          <button class="btn ghost big" data-go="facematch" id="btnToFace" disabled>Continue →</button>
+          <button class="btn gold big" data-go="facematch" id="btnToFace" disabled>Continue →</button>
         </div>
 
         <!-- Face match / QR -->
@@ -210,7 +210,7 @@
             <div id="qrChip" class="chip idle">QR: not run</div>
             <button class="btn primary big" id="btnQr">Verify QR + selfie</button>
           </div>
-          <button class="btn ghost big" data-go="review" id="btnToReview">Review details →</button>
+          <button class="btn gold big" data-go="review" id="btnToReview">Review details →</button>
         </div>
 
         <!-- Review -->
@@ -299,6 +299,7 @@
     <section class="console-col">
       <details class="card" open>
         <summary><h2><svg class="ic"><use href="#i-pulse"/></svg>API activity <small id="apiCount">0 calls</small></h2></summary>
+        <p class="legend"><span class="who pp">PUSOPAY</span> this demo's backend (DigiCash) &nbsp;·&nbsp; <span class="who svi">SVI</span> upstream at verify.dev.svi.cloud</p>
         <div id="apiLog" class="apilog"><p class="muted">Every call the app makes appears here with timing + payload.</p></div>
       </details>
 
@@ -322,10 +323,10 @@
       <details class="card" open>
         <summary><h2><svg class="ic"><use href="#i-check"/></svg>Verification results</h2></summary>
         <div class="chips">
-          <div class="chip idle" id="cLive">Liveness —</div>
-          <div class="chip idle" id="cOcr">ID read —</div>
-          <div class="chip idle" id="cFace">Face match —</div>
-          <div class="chip idle" id="cSubmit">Decision —</div>
+          <div class="chip wait" id="cLive">Liveness · waiting</div>
+          <div class="chip wait" id="cOcr">ID read · waiting</div>
+          <div class="chip wait" id="cFace">Face match · waiting</div>
+          <div class="chip wait" id="cSubmit">Decision · waiting</div>
         </div>
         <pre id="outDetail" class="out">Select any API call to inspect its full JSON here.</pre>
       </details>
@@ -363,6 +364,6 @@
   <footer>PusoPay demo · DigiCash eWallet · identity checks by SVI · base <code>https://verify.dev.svi.cloud/api/v1</code><br />PusoPay logo and other details are placeholders for demo purposes only — no real money was used.<br />Demo by Kevin G. Vega</footer>
   <div id="toast" class="toast"></div>
   <script src="vendor/jsQR.min.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

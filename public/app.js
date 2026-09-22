@@ -126,13 +126,39 @@ document.querySelectorAll('.tab').forEach((t) => (t.onclick = () => {
 }));
 
 /* ---------- backend console log ---------- */
+/* Owner map: PusoPay (DigiCash) demo routes → SVI upstream they proxy.
+   String = upstream SVI call; {local} = handled entirely by this demo. */
+const UPSTREAM = {
+  '/api/kyc/token': 'POST /auth/token',
+  '/api/kyc/transaction/create': 'POST /transaction/create',
+  '/api/kyc/liveness/passive': 'POST /liveness/passive',
+  '/api/kyc/id/ocr': 'POST /id/ocr',
+  '/api/kyc/face-match/check': 'POST /face-match/check',
+  '/api/kyc/verifications/qr': 'POST /verifications/qr',
+  '/api/kyc/transaction/submit': 'POST /transaction/submit',
+  '/api/kyc/health': 'GET /health',
+};
+function upstreamOf(path) {
+  const clean = String(path).split('?')[0];
+  if (UPSTREAM[clean]) return { svi: UPSTREAM[clean] };
+  if (clean.startsWith('/api/kyc/result/') || clean === '/api/kyc/sessions' || clean === '/api/kyc/config') {
+    return { local: 'demo store — no upstream call' };
+  }
+  if (clean.startsWith('/api/wallet/')) return { local: 'DigiCash eWallet mock ledger' };
+  return { local: 'local only' };
+}
+
 function logCall({ label, endpoint, ms, ok, body }) {
   S.calls += 1;
   $('apiCount').textContent = `${S.calls} call${S.calls === 1 ? '' : 's'}`;
+  const up = upstreamOf(endpoint.replace(/^[A-Z]+ /, ''));
+  const routeHtml = up.svi
+    ? `<div class="route"><span class="who pp">PUSOPAY</span><code>${endpoint}</code></div><div class="route"><span class="who svi">SVI</span><code>${up.svi}</code><span class="arr">↑ upstream</span></div>`
+    : `<div class="route"><span class="who pp">PUSOPAY</span><code>${endpoint}</code></div><div class="muted">${up.local}</div>`;
   const b = document.createElement('button');
   b.className = 'api-row';
   b.innerHTML = `<div class="t"><b>${label}</b><span class="badge ${ok ? 'ok' : 'bad'}">${ok ? 'OK' : 'FAIL'} · ${ms}ms</span></div>
-    <div class="muted">${new Date().toLocaleTimeString()} · ${endpoint}</div>`;
+    <div class="muted">${new Date().toLocaleTimeString()}</div>${routeHtml}`;
   b.onclick = () => { $('outDetail').textContent = typeof body === 'string' ? body : JSON.stringify(body, null, 2); };
   const log = $('apiLog');
   if (S.calls === 1) log.innerHTML = '';
@@ -157,7 +183,7 @@ async function api(label, endpoint, { method = 'GET', body } = {}) {
 }
 function chip(id, ok, text) {
   const el = $(id);
-  el.className = 'chip ' + (ok === true ? 'ok' : ok === false ? 'bad' : 'idle');
+  el.className = 'chip ' + (ok === true ? 'ok' : ok === false ? 'bad' : 'wait');
   el.textContent = text;
 }
 /* 0.82 → "82%" */
@@ -595,9 +621,15 @@ $('btnSubmit').onclick = () => withBusy('btnSubmit', async () => {
       last_name: $('f_last').value.trim(), first_name: $('f_first').value.trim(),
       ...($('f_suffix').value.trim() ? { suffix: $('f_suffix').value.trim() } : {}),
       birthdate: $('f_bday').value,
-      ...(($('f_addr1').value || $('f_brgy').value || $('f_city').value || $('f_prov').value || $('f_zip').value)
-        ? { address: { address_line_1: $('f_addr1').value, barangay: $('f_brgy').value, city_municipality: $('f_city').value, province: $('f_prov').value, zipcode: $('f_zip').value } }
-        : {}),
+      // address_line1 is always required by /transaction/submit — send the
+      // object every time, empty strings when the applicant left blanks.
+      address: {
+        address_line1: $('f_addr1').value.trim(),
+        barangay: $('f_brgy').value.trim(),
+        city_municipality: $('f_city').value.trim(),
+        province: $('f_prov').value.trim(),
+        zipcode: $('f_zip').value.trim(),
+      },
     },
     images: { face_bio_base64: S.selfieB64, id_front_base64: S.idFrontB64, ...(S.idBackB64 ? { id_back_base64: S.idBackB64 } : {}) },
   };
@@ -614,14 +646,19 @@ $('btnSubmit').onclick = () => withBusy('btnSubmit', async () => {
     // Demo rule: PNID passes, every other ID stays pending review.
     const raw = r.verification_status;
     const status = String(payload.id_information.type || '').toUpperCase().includes('PNID') ? 'PASSED' : 'PENDING_REVIEW';
-    S.submit = { ...r, verification_status: status };
+    // Upstream field names vary — accept any session/timestamp key it sends.
+    const sessId = r.session_transaction_id || r.transaction_id || r.session_id || r.trn || r.id || S.trn;
+    const created = r.create_at || r.created_at || r.createdAt || r.timestamp || new Date().toISOString();
+    const knownKeys = ['verification_status', 'session_transaction_id', 'transaction_id', 'session_id', 'trn', 'id', 'create_at', 'created_at', 'createdAt', 'timestamp'];
+    const extraKeys = Object.keys(r).filter((k) => !knownKeys.includes(k));
+    S.submit = { ...r, session_transaction_id: sessId, create_at: created, verification_status: status };
     const passed = status === 'PASSED';
     chip('cSubmit', passed, `Decision: ${status}`);
     markStep('submit');
     $('resTitle').textContent = passed ? 'Verified!' : 'Under review';
     $('resSub').textContent = passed ? 'Your wallet is unlocked.' : 'Usually cleared within a day — demo unlocks your wallet anyway.';
     $('resCard').className = 'res-card ' + (passed ? 'pass' : 'pend');
-    $('resCard').innerHTML = `<b>${status}</b><br />Session <code>${r.session_transaction_id}</code><br /><span class="muted">${r.create_at}${raw !== status ? ` · upstream said ${raw}, demo rule applied` : ''}</span>`;
+    $('resCard').innerHTML = `<b>${status}</b><br />Session <code>${sessId}</code><br /><span class="muted">${created}${raw !== status ? ` · upstream said ${raw}` : ''}${extraKeys.length ? ` · also returned: ${extraKeys.join(', ')}` : ''}</span>`;
     $('btnToWallet').classList.remove('hidden');
     applyVerificationUI(status, payload.personal_information.first_name);
     await refreshWallet();
@@ -707,10 +744,10 @@ function resetSession() {
   Object.keys(S).filter((k) => k.startsWith('done_')).forEach((k) => delete S[k]);
   $('trnLabel').textContent = '— none —';
   $('outTrn').textContent = 'Secure session not started.';
-  chip('cLive', undefined, 'Liveness —');
-  chip('cOcr', undefined, 'ID read —');
-  chip('cFace', undefined, 'Face match —');
-  chip('cSubmit', undefined, 'Decision —');
+  chip('cLive', undefined, 'Liveness · waiting');
+  chip('cOcr', undefined, 'ID read · waiting');
+  chip('cFace', undefined, 'Face match · waiting');
+  chip('cSubmit', undefined, 'Decision · waiting');
   chip('liveChip', undefined, 'Liveness: not run');
   chip('matchChip', undefined, 'Face match: not run');
   chip('qrChip', undefined, 'QR: not run');
