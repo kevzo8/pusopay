@@ -187,6 +187,7 @@ function logCall({ label, endpoint, ms, ok, body, req }) {
   const log = $('apiLog');
   if (S.calls === 1) log.innerHTML = '';
   log.prepend(b);
+  log.scrollTop = 0;
   $('outDetail').textContent = typeof body === 'string' ? body : JSON.stringify(body, null, 2);
 }
 async function api(label, endpoint, { method = 'GET', body } = {}) {
